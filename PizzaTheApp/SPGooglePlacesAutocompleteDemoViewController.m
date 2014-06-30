@@ -78,6 +78,7 @@
 
 - (void)viewDidUnload {
     [self setMapView:nil];
+    [self.locationManager stopUpdatingLocation];
     [super viewDidUnload];
     
 }
@@ -266,6 +267,7 @@
             dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, 0.3* NSEC_PER_SEC);
             dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
                 
+                NSLog(@"ADDRESS STRING: %@", addressString);
                 NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
                 [defaults setObject:[NSString stringWithFormat:@"%@", addressString] forKey:@"UserAddressString"];
                 [defaults synchronize];
@@ -277,7 +279,7 @@
                 }
                 shouldBeginEditing = NO;
                 [self.searchDisplayController setActive:NO];
-                [self.mapView removeAnnotation:selectedPlaceAnnotation];
+              //  [self.mapView removeAnnotation:selectedPlaceAnnotation];
                 
                 //[self sendToOverviewScreen];
             });

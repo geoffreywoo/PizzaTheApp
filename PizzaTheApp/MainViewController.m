@@ -85,25 +85,6 @@
         [pricingStore setInteger:basePrice forKey:@"basePrice"];
         [pricingStore synchronize];
         
-        
-        /* CREATING
-        
-        NSArray *restaurants = [responseObject objectForKey:@"restaurants"];
-        NSMutableArray *restaurantIDArray = [[NSMutableArray alloc]init];
-        
-        for(int i=0; i< restaurants.count; i++){
-            NSDictionary *document = [restaurants objectAtIndex:i];
-            NSString *restaurantID = [document objectForKey:@"restaurantid"];
-            [restaurantIDArray addObject: restaurantID];
-        }
-        NSLog(@"%@",restaurantIDArray);
-        
-        NSUserDefaults *restaurantIDStore = [NSUserDefaults standardUserDefaults];
-        [restaurantIDStore setObject:restaurantIDArray forKey:@"restaurantIDs"];
-        [restaurantIDStore synchronize];
-        
-        [self submitOrderToServer]; */
-        
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         [MBProgressHUD hideHUDForView:self.view animated:YES];
         NSLog(@"Error: %@", error.description);
@@ -327,7 +308,7 @@
     confirmButton.backgroundColor = pizzaRedColor;
     [[confirmButton layer] setMasksToBounds:YES];
     [[confirmButton layer] setBorderWidth:0.0f];
-    [confirmButton addTarget:self action:@selector(goBack:) forControlEvents:UIControlEventTouchUpInside];
+    [confirmButton addTarget:self action:@selector(placeOrder:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:confirmButton];
     
     UILabel *priceLabel = [[UILabel alloc] initWithFrame:CGRectMake(15, 10, 300, 5)];
@@ -444,7 +425,7 @@
     confirmButton.backgroundColor = pizzaRedColor;
     [[confirmButton layer] setMasksToBounds:YES];
     [[confirmButton layer] setBorderWidth:0.0f];
-    [confirmButton addTarget:self action:@selector(goBack:) forControlEvents:UIControlEventTouchUpInside];
+    [confirmButton addTarget:self action:@selector(placeOrder:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:confirmButton];
     
     UILabel *priceLabel = [[UILabel alloc] initWithFrame:CGRectMake(15, 10, 300, 25)];
@@ -498,7 +479,7 @@
     
 }
 
-- (void)goBack:(UIBarButtonItem *)sender
+- (void)placeOrder:(UIBarButtonItem *)sender
 {
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Confirm Order"
                                                     message:@"Are you ready for some pizza?"
@@ -523,15 +504,32 @@
 }
 
 
+- (NSString *)URLEncodeStringFromString:(NSString *)string
+{
+    static CFStringRef charset = CFSTR("!@#$%&*()+'\";:=,/?[] ");
+    CFStringRef str = (__bridge CFStringRef)string;
+    CFStringEncoding encoding = kCFStringEncodingUTF8;
+    return (NSString *)CFBridgingRelease(CFURLCreateStringByAddingPercentEscapes(NULL, str, NULL, charset, encoding));
+}
+
 - (void)getRestaurantIDs {
+    NSLog(@"getting restaurant ids");
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     
     NSString *BaseURL = BASE_URL_RESTAURANTS;
-    NSString *address1 = @"341%20Jersey%20Street";
+    /*NSString *address1 = @"341 Jersey Street";
     NSString *address2 = @"";
     NSString *zip = @"94114";
+    */
+    NSUserDefaults *orderInfo = [NSUserDefaults standardUserDefaults];
+    NSLog(@"Customer ID: %@", [orderInfo objectForKey:@"customerID"]);
     
+    NSString *address1 = [[[orderInfo objectForKey:@"UserAddressString"] componentsSeparatedByString:@","] objectAtIndex:0];
+    NSString *address2 = @"";
+    NSString *zip = [orderInfo objectForKey:@"zipCode"];
+
+    //https://pizzatheapp-staging.herokuapp.com/api/closest-restaurants?address1=201%20Post%20St&address2=&zip=94108&toppings=
     
     /*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++//
     || GETS RESTAURANT IDs                                                               //
@@ -548,7 +546,6 @@
 
     NSMutableArray *toppingsFormattedForOrder = [NSMutableArray arrayWithObjects:@"green_peppers", @"mushrooms", @"pepperoni", @"sausage", @"black_olives", nil];
     
-    NSUserDefaults *orderInfo = [NSUserDefaults standardUserDefaults];
     NSMutableArray *toppingsArrayForOrder = [[orderInfo objectForKey:@"chosenToppings"] mutableCopy];
     NSMutableString *toppingsStringForOrder = [NSMutableString stringWithString:@""];
     NSString *lastTopping;
@@ -581,14 +578,21 @@
     NSUserDefaults *toppingStore = [NSUserDefaults standardUserDefaults];
     [toppingStore setObject:formattedToppingsForSubmission forKey:@"formattedToppingsForSubmission"];
     [toppingStore synchronize];
-    
+
     
     NSLog(@"Chosen Toppings String: %@", toppingsStringForOrder);
     NSLog(@"%@address1=%@&address2=%@&zip=%@&toppings=%@",BaseURL,address1,address2,zip,toppingsStringForOrder);
     
-    [self submitOrderToServer];
+    NSString *getRequestString = [NSString stringWithFormat:@"%@address1=%@&address2=%@&zip=%@&toppings=%@",BaseURL,address1,address2,zip,toppingsStringForOrder];
+    NSMutableString *urlEncodedString = [[NSMutableString alloc] init];
+    [urlEncodedString setString:[getRequestString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
+    [urlEncodedString replaceOccurrencesOfString:@"," withString:@"%2C" options:NSCaseInsensitiveSearch range:NSMakeRange(0, [urlEncodedString length])];
+  
     
-     [manager GET:[NSString stringWithFormat:@"%@address1=%@&address2=%@&zip=%@&toppings=%@",BaseURL,address1,address2,zip,toppingsStringForOrder] parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    NSLog(@"GET REQUEST STRING: %@", getRequestString);
+    NSLog(@"URL ENCODED GET REQUEST STRING: %@", urlEncodedString);
+    
+     [manager GET: urlEncodedString parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
         
         
         NSLog(@"JSON: %@", responseObject);
@@ -619,6 +623,7 @@
 }
 
 - (void)submitOrderToServer {
+    NSLog(@"submit order to server");
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     manager.responseSerializer = [AFJSONResponseSerializer serializerWithReadingOptions:NSJSONReadingAllowFragments];
     NSUserDefaults *orderInfo = [NSUserDefaults standardUserDefaults];
@@ -629,21 +634,28 @@
     NSString *zipCode = [orderInfo objectForKey:@"zipCode"];
     NSString *phoneNumber = [orderInfo objectForKey:@"customerPhone"];
     
+    NSLog(@"street address: %@", streetAddress);
+    NSLog(@"customerID: %@", customerID);
+    NSLog(@"zipCode: %@", zipCode);
+    NSLog(@"phoneNumber: %@", phoneNumber);
+    
     if(zipCode==NULL || streetAddress==NULL ){
         UIViewController *sec=[[SPGooglePlacesAutocompleteDemoViewController alloc] initWithNibName:@"SPGooglePlacesAutocompleteDemoViewController" bundle:nil];
         [self.navigationController pushViewController:sec animated:YES];
         customerID = @"0000";
-    } else if(customerID==NULL || phoneNumber==NULL || customerID==nil || phoneNumber==nil){
-        NSLog(@"Hey");
+  /*  } else if(customerID==NULL || phoneNumber==NULL || customerID==nil || phoneNumber==nil){
+        NSLog(@"nil information");
         UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main_iPhone" bundle:nil];
         PizzaViewController *sec= [storyboard instantiateViewControllerWithIdentifier:@"PizzaViewController"];
-        [self.navigationController pushViewController:sec animated:YES];
+        [self.navigationController pushViewController:sec animated:YES];*/
     } else {
         //@"restaurantIds": restaurantIDList,
         //@"fetchRestaurants": @"true",
         
         NSMutableArray *restaurantIDList = [[orderInfo objectForKey:@"restaurantIDs"] mutableCopy];
+        NSLog(@"restaurant id list: %@",restaurantIDList);
         NSMutableArray *formattedToppingsForSubmission = [[orderInfo objectForKey:@"formattedToppingsForSubmission"] mutableCopy];
+        [formattedToppingsForSubmission removeObjectIdenticalTo:@"none"];
         NSLog(@"Array of toppings submitting: %@", formattedToppingsForSubmission);
         
         NSDictionary *params = @{@"phone": phoneNumber,
@@ -658,6 +670,7 @@
                                  @"toppings": formattedToppingsForSubmission};
         
         
+        NSLog(@"params: %@", params);
         [manager POST:API_ORDERS parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
             NSLog(@"Customer ID: %@", [orderInfo objectForKey:@"customerID"]);
             NSLog(@"Response: %@", responseObject);
@@ -712,21 +725,22 @@
     
 }
 
-/*
+
 -(IBAction)goToPizzaPage:(id)sender{
-    UIViewController *sec=[[PizzaViewController alloc] initWithNibName:@"PizzaViewController" bundle:nil];
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main_iPhone" bundle:nil];
+    PizzaViewController *sec= [storyboard instantiateViewControllerWithIdentifier:@"PizzaViewController"];
     [self.navigationController pushViewController:sec animated:YES];
 }
 
 -(IBAction)goToPaymentPage:(id)sender{
-    UIViewController *sec=[[PaymentViewController alloc] initWithNibName:@"PaymentViewController" bundle:nil];
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main_iPhone" bundle:nil];
+    PizzaViewController *sec= [storyboard instantiateViewControllerWithIdentifier:@"PaymentViewController"];
     [self.navigationController pushViewController:sec animated:YES];
 }
 
 -(IBAction)GoToMapSearchPage:(id)sender{
     UIViewController *sec=[[SPGooglePlacesAutocompleteDemoViewController alloc] initWithNibName:@"SPGooglePlacesAutocompleteDemoViewController" bundle:nil];
     [self.navigationController pushViewController:sec animated:YES];
-}*/
-
+}
 @end
 

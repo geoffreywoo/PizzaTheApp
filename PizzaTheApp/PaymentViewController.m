@@ -92,7 +92,7 @@
     // FIRST TIME LOADING
     if ([[NSUserDefaults standardUserDefaults] boolForKey:@"HasLaunchedOnce"]){
         saveButton = [[UIBarButtonItem alloc] initWithTitle:@"Save" style:UIBarButtonItemStyleDone target:self action:@selector(save:)];
-        saveButton.enabled = NO;
+        saveButton.enabled = YES;
         self.navigationItem.rightBarButtonItem = saveButton;
         
         UIView * phone = [self.view viewWithTag:150];
@@ -176,7 +176,7 @@
     [self.view addSubview:mySwitch];*/
     
     if([[NSUserDefaults standardUserDefaults] objectForKey:@"customerPhone"]==NULL || [[NSUserDefaults standardUserDefaults] objectForKey:@"customerID"]==NULL){
-        saveButton.enabled = NO;
+        saveButton.enabled = YES;
     } else {
         saveButton.enabled = YES;
     }
@@ -215,7 +215,7 @@
     }
     
     if([[NSUserDefaults standardUserDefaults] objectForKey:@"customerPhone"]==NULL || [[NSUserDefaults standardUserDefaults] objectForKey:@"customerID"]==NULL){
-        saveButton.enabled = NO;
+        saveButton.enabled = YES;
     } else {
         saveButton.enabled = YES;
     }
@@ -531,7 +531,8 @@
     NSLog(@"Received token %@", token.tokenId);
     
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    NSDictionary *params = @{@"cardToken": token.tokenId};
+    NSDictionary *params = @{@"cardToken": token.tokenId, @"email": @"joey@pepperoni.com", @"metadata": @{@"first_name": @"Joey", @"last_name": @"Pepperoni", @"email": @"joey@pepperoni.com", @"delivery_phone": phoneNumberField.text}};
+
     manager.responseSerializer = [AFJSONResponseSerializer serializerWithReadingOptions:NSJSONReadingAllowFragments];
 
     
@@ -552,14 +553,14 @@
         
         // FIRST TIME LOADING
         if ([[NSUserDefaults standardUserDefaults] boolForKey:@"HasLaunchedOnce"]){
-            [MBProgressHUD hideHUDForView:self.view animated:YES];
-            [[self navigationController] popToRootViewControllerAnimated:YES];
+
         } else {
-            [MBProgressHUD hideHUDForView:self.view animated:YES];
             [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"HasLaunchedOnce"];
             [[NSUserDefaults standardUserDefaults] synchronize];
-            [[self navigationController] popToRootViewControllerAnimated:YES];
         }
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
+        [[self navigationController] popToRootViewControllerAnimated:YES];
+        
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
     }];
