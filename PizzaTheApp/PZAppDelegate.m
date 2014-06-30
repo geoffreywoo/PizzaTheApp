@@ -25,13 +25,14 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     
+    /*
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     self.window.backgroundColor = [UIColor whiteColor];
     UIViewController *cont=[[MainViewController alloc]initWithNibName:@"MainViewController" bundle:nil];
     self.navController=[[UINavigationController alloc]initWithRootViewController:cont];
     [self.window setRootViewController:navController];
     [self.window makeKeyAndVisible];
-    
+    */
     
     //[GMSServices provideAPIKey:@"AIzaSyBvQ1lVl5sRj9hXhuYov8aRJQoiHspBXug"];
     

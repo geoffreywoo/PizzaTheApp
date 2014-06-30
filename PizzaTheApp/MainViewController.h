@@ -19,6 +19,6 @@
 
 //@property(nonatomic, retain) IBOutlet UIButton *clickMeButton;
 
--(IBAction)goToPizzaPage:(id)sender;
+//-(IBAction)goToPizzaPage:(id)sender;
 
 @end

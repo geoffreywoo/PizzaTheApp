@@ -42,22 +42,6 @@
 
 @implementation MainViewController
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-
-{
-    
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    
-    if (self) {
-        
-        // Custom initialization
-        
-    }
-    
-    return self;
-    
-}
-
 - (void)viewDidLoad
 
 {
@@ -172,7 +156,8 @@
         [self.navigationItem setHidesBackButton:YES];
     } else {
         [self.navigationItem setHidesBackButton:YES];
-        UIViewController *sec=[[PizzaViewController alloc] initWithNibName:@"PizzaViewController" bundle:nil];
+        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main_iPhone" bundle:nil];
+        PizzaViewController *sec= [storyboard instantiateViewControllerWithIdentifier:@"PizzaViewController"];
         [self.navigationController pushViewController:sec animated:YES];
     }
     
@@ -650,7 +635,8 @@
         customerID = @"0000";
     } else if(customerID==NULL || phoneNumber==NULL || customerID==nil || phoneNumber==nil){
         NSLog(@"Hey");
-        UIViewController *sec=[[PaymentViewController alloc] initWithNibName:@"PaymentViewController" bundle:nil];
+        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main_iPhone" bundle:nil];
+        PizzaViewController *sec= [storyboard instantiateViewControllerWithIdentifier:@"PizzaViewController"];
         [self.navigationController pushViewController:sec animated:YES];
     } else {
         //@"restaurantIds": restaurantIDList,
@@ -726,7 +712,7 @@
     
 }
 
-
+/*
 -(IBAction)goToPizzaPage:(id)sender{
     UIViewController *sec=[[PizzaViewController alloc] initWithNibName:@"PizzaViewController" bundle:nil];
     [self.navigationController pushViewController:sec animated:YES];
@@ -740,7 +726,7 @@
 -(IBAction)GoToMapSearchPage:(id)sender{
     UIViewController *sec=[[SPGooglePlacesAutocompleteDemoViewController alloc] initWithNibName:@"SPGooglePlacesAutocompleteDemoViewController" bundle:nil];
     [self.navigationController pushViewController:sec animated:YES];
-}
+}*/
 
 @end
 

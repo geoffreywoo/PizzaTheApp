@@ -14,7 +14,6 @@
     NSMutableArray* toppingsArray;
     NSMutableArray* selectedToppings;
     NSMutableArray* pizzaSong;
-    UIButton* pizzaMain;
     UILabel *pageTitle;
     CGRect screenRect;
     UIView *view1;
@@ -26,6 +25,8 @@
     UILabel *pizzaString;
     BOOL animating;
 }
+
+@property IBOutlet UIButton* pizzaMain;
 
 - (void)playPizzaSong:(id)sender;
 

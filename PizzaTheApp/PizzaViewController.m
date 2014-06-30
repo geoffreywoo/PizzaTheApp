@@ -21,15 +21,6 @@
 
 @implementation PizzaViewController
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-        // Custom initialization
-    }
-    return self;
-}
-
 - (void)viewDidLoad {
     [super viewDidLoad];
  
@@ -61,13 +52,7 @@
      |   SETTING UP MAIN PIZZA VIEW
      |
      |+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
-    
-    pizzaMain = [UIButton buttonWithType:UIButtonTypeCustom];
-    pizzaMain.frame = CGRectMake(10, 70, (screenRect.size.width)-20, (screenRect.size.width)-20);
-    [pizzaMain setTitle:[NSString stringWithFormat:@"pizza"] forState:UIControlStateNormal];
-    [pizzaMain setImage:[UIImage imageNamed:[NSString stringWithFormat:@"pizza.png"]] forState:UIControlStateNormal];
-    [pizzaMain addTarget:self action:@selector(playPizzaSong:) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:pizzaMain];
+
     
     
     /*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++//
@@ -86,10 +71,10 @@
         for(int i = 0; i < [toppingsArray count]; i++){
             if(![[selectedToppings objectAtIndex:i] isEqualToString:@"none"]){
                 UIImageView *toppingForButton = [[UIImageView alloc] initWithImage:[UIImage imageNamed:[NSString stringWithFormat:@"%@new.png",[selectedToppings objectAtIndex:i]]]];
-                toppingForButton.frame = CGRectMake(0, 0, pizzaMain.frame.size.width, pizzaMain.frame.size.height);
+                toppingForButton.frame = CGRectMake(0, 0, self.pizzaMain.frame.size.width, self.pizzaMain.frame.size.height);
                 float position = [toppingsArray indexOfObject:[toppingsArray objectAtIndex:i]] + 1;
                 toppingForButton.tag = position;
-                [pizzaMain addSubview:toppingForButton];
+                [self.pizzaMain addSubview:toppingForButton];
             }
         }
     } else {
@@ -230,9 +215,9 @@
         
         
         UIImageView *toppingSelect = [[UIImageView alloc] initWithImage:[UIImage imageNamed:[NSString stringWithFormat:@"%@new.png",[sender currentTitle]]]];
-        toppingSelect.frame = CGRectMake(0, 0, pizzaMain.frame.size.width, pizzaMain.frame.size.height);
+        toppingSelect.frame = CGRectMake(0, 0, self.pizzaMain.frame.size.width, self.pizzaMain.frame.size.height);
         toppingSelect.tag = position;
-        [pizzaMain addSubview:toppingSelect];
+        [self.pizzaMain addSubview:toppingSelect];
         NSLog(@"%@", selectedToppings);
         [selectedToppings replaceObjectAtIndex:(position-1) withObject:[NSString stringWithFormat:@"%@",value]];
         NSLog(@"%@", selectedToppings);
@@ -318,7 +303,7 @@
 - (void) stopSpin {
     [UIView animateWithDuration:0.1 delay:0.0 options:UIViewAnimationOptionBeginFromCurrentState | UIViewAnimationOptionCurveLinear animations:^{
         CGAffineTransform transform = CGAffineTransformMakeRotation(M_PI * 0.05);
-        pizzaMain.transform = transform;
+        self.pizzaMain.transform = transform;
     } completion:NULL];
     
     animating = NO;
@@ -327,7 +312,7 @@
 - (void) startSpin {
     [UIView animateWithDuration:2.0 delay:0.0 options:UIViewAnimationOptionRepeat | UIViewAnimationOptionCurveLinear animations:^{
         CGAffineTransform transform = CGAffineTransformMakeRotation(DEGREES_TO_RADIANS(360));
-        pizzaMain.transform = transform;
+        self.pizzaMain.transform = transform;
     } completion:NULL];
     
     animating = YES;

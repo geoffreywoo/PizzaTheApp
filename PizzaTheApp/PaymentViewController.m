@@ -34,15 +34,6 @@
 
 @implementation PaymentViewController
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-        // Custom initialization
-    }
-    return self;
-}
-
 - (void)viewDidLoad {
     
     [super viewDidLoad];
@@ -112,7 +103,7 @@
     } else {
         // Setup next button
         saveButton = [[UIBarButtonItem alloc] initWithTitle:@"Next" style:UIBarButtonItemStyleDone target:self action:@selector(save:)];
-        saveButton.enabled = NO;
+        saveButton.enabled = YES;
         
         UIView * phone = [self.view viewWithTag:150];
         UIView * card = [self.view viewWithTag:200];
