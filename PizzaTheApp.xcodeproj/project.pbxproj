@@ -58,6 +58,32 @@
 		60A6A9A51960E31F009D99AA /* pizza.png in Resources */ = {isa = PBXBuildFile; fileRef = 60A6A9A01960E31F009D99AA /* pizza.png */; };
 		60A6A9A81960E328009D99AA /* sausage.png in Resources */ = {isa = PBXBuildFile; fileRef = 60A6A9A61960E328009D99AA /* sausage.png */; };
 		60A6A9A91960E328009D99AA /* sausagenew.png in Resources */ = {isa = PBXBuildFile; fileRef = 60A6A9A71960E328009D99AA /* sausagenew.png */; };
+		60A6A9C8196224DE009D99AA /* 58x58.png in Resources */ = {isa = PBXBuildFile; fileRef = 60A6A9B9196224DE009D99AA /* 58x58.png */; };
+		60A6A9C9196224DE009D99AA /* 80x80.png in Resources */ = {isa = PBXBuildFile; fileRef = 60A6A9BA196224DE009D99AA /* 80x80.png */; };
+		60A6A9CA196224DE009D99AA /* 120x120.png in Resources */ = {isa = PBXBuildFile; fileRef = 60A6A9BB196224DE009D99AA /* 120x120.png */; };
+		60A6A9CB196224DE009D99AA /* emptyPlate.png in Resources */ = {isa = PBXBuildFile; fileRef = 60A6A9BC196224DE009D99AA /* emptyPlate.png */; };
+		60A6A9CC196224DE009D99AA /* emptyPlate@2X.png in Resources */ = {isa = PBXBuildFile; fileRef = 60A6A9BD196224DE009D99AA /* emptyPlate@2X.png */; };
+		60A6A9CD196224DE009D99AA /* header-logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 60A6A9BE196224DE009D99AA /* header-logo.png */; };
+		60A6A9CE196224DE009D99AA /* header-logo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 60A6A9BF196224DE009D99AA /* header-logo@2x.png */; };
+		60A6A9CF196224DE009D99AA /* Load Screen - 640x960.png in Resources */ = {isa = PBXBuildFile; fileRef = 60A6A9C0196224DE009D99AA /* Load Screen - 640x960.png */; };
+		60A6A9D0196224DE009D99AA /* Load Screen - 640x1136.png in Resources */ = {isa = PBXBuildFile; fileRef = 60A6A9C1196224DE009D99AA /* Load Screen - 640x1136.png */; };
+		60A6A9D1196224DE009D99AA /* map-pin.png in Resources */ = {isa = PBXBuildFile; fileRef = 60A6A9C2196224DE009D99AA /* map-pin.png */; };
+		60A6A9D2196224DE009D99AA /* map-pinPizza.png in Resources */ = {isa = PBXBuildFile; fileRef = 60A6A9C3196224DE009D99AA /* map-pinPizza.png */; };
+		60A6A9D3196224DE009D99AA /* pizzaCutter.png in Resources */ = {isa = PBXBuildFile; fileRef = 60A6A9C4196224DE009D99AA /* pizzaCutter.png */; };
+		60A6A9D4196224DE009D99AA /* pizzaCutter@2X.png in Resources */ = {isa = PBXBuildFile; fileRef = 60A6A9C5196224DE009D99AA /* pizzaCutter@2X.png */; };
+		60A6A9D5196224DE009D99AA /* plateFull.png in Resources */ = {isa = PBXBuildFile; fileRef = 60A6A9C6196224DE009D99AA /* plateFull.png */; };
+		60A6A9D6196224DE009D99AA /* plateFull@2X.png in Resources */ = {isa = PBXBuildFile; fileRef = 60A6A9C7196224DE009D99AA /* plateFull@2X.png */; };
+		60A6A9D719622695009D99AA /* Verlag Black Italic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 60A6A9AA1960E332009D99AA /* Verlag Black Italic.otf */; };
+		60A6A9D819622695009D99AA /* Verlag Black.otf in Resources */ = {isa = PBXBuildFile; fileRef = 60A6A9AB1960E332009D99AA /* Verlag Black.otf */; };
+		60A6A9D919622695009D99AA /* Verlag Bold Italic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 60A6A9AC1960E332009D99AA /* Verlag Bold Italic.otf */; };
+		60A6A9DA19622695009D99AA /* Verlag Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 60A6A9AD1960E332009D99AA /* Verlag Bold.otf */; };
+		60A6A9DB19622695009D99AA /* Verlag Book Italic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 60A6A9AE1960E332009D99AA /* Verlag Book Italic.otf */; };
+		60A6A9DC19622695009D99AA /* Verlag Book.otf in Resources */ = {isa = PBXBuildFile; fileRef = 60A6A9AF1960E332009D99AA /* Verlag Book.otf */; };
+		60A6A9DD19622695009D99AA /* Verlag Light Italic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 60A6A9B01960E332009D99AA /* Verlag Light Italic.otf */; };
+		60A6A9DE19622695009D99AA /* Verlag Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = 60A6A9B11960E332009D99AA /* Verlag Light.otf */; };
+		60A6A9DF19622695009D99AA /* Verlag XLight Italic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 60A6A9B21960E332009D99AA /* Verlag XLight Italic.otf */; };
+		60A6A9E019622695009D99AA /* Verlag XLight.otf in Resources */ = {isa = PBXBuildFile; fileRef = 60A6A9B31960E332009D99AA /* Verlag XLight.otf */; };
+		60A6A9E119622695009D99AA /* Verlag-Book.otf in Resources */ = {isa = PBXBuildFile; fileRef = 60A6A9B41960E332009D99AA /* Verlag-Book.otf */; };
 		8F7398F8477B40E1A796B950 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A764387439F404E94B2916A /* libPods.a */; };
 /* End PBXBuildFile section */
 
@@ -153,6 +179,21 @@
 		60A6A9B21960E332009D99AA /* Verlag XLight Italic.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Verlag XLight Italic.otf"; sourceTree = "<group>"; };
 		60A6A9B31960E332009D99AA /* Verlag XLight.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Verlag XLight.otf"; sourceTree = "<group>"; };
 		60A6A9B41960E332009D99AA /* Verlag-Book.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Verlag-Book.otf"; sourceTree = "<group>"; };
+		60A6A9B9196224DE009D99AA /* 58x58.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 58x58.png; sourceTree = "<group>"; };
+		60A6A9BA196224DE009D99AA /* 80x80.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 80x80.png; sourceTree = "<group>"; };
+		60A6A9BB196224DE009D99AA /* 120x120.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 120x120.png; sourceTree = "<group>"; };
+		60A6A9BC196224DE009D99AA /* emptyPlate.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = emptyPlate.png; sourceTree = "<group>"; };
+		60A6A9BD196224DE009D99AA /* emptyPlate@2X.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "emptyPlate@2X.png"; sourceTree = "<group>"; };
+		60A6A9BE196224DE009D99AA /* header-logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "header-logo.png"; sourceTree = "<group>"; };
+		60A6A9BF196224DE009D99AA /* header-logo@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "header-logo@2x.png"; sourceTree = "<group>"; };
+		60A6A9C0196224DE009D99AA /* Load Screen - 640x960.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Load Screen - 640x960.png"; sourceTree = "<group>"; };
+		60A6A9C1196224DE009D99AA /* Load Screen - 640x1136.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Load Screen - 640x1136.png"; sourceTree = "<group>"; };
+		60A6A9C2196224DE009D99AA /* map-pin.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "map-pin.png"; sourceTree = "<group>"; };
+		60A6A9C3196224DE009D99AA /* map-pinPizza.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "map-pinPizza.png"; sourceTree = "<group>"; };
+		60A6A9C4196224DE009D99AA /* pizzaCutter.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pizzaCutter.png; sourceTree = "<group>"; };
+		60A6A9C5196224DE009D99AA /* pizzaCutter@2X.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "pizzaCutter@2X.png"; sourceTree = "<group>"; };
+		60A6A9C6196224DE009D99AA /* plateFull.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = plateFull.png; sourceTree = "<group>"; };
+		60A6A9C7196224DE009D99AA /* plateFull@2X.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "plateFull@2X.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -277,6 +318,21 @@
 		60A6A9B519613519009D99AA /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				60A6A9B9196224DE009D99AA /* 58x58.png */,
+				60A6A9BA196224DE009D99AA /* 80x80.png */,
+				60A6A9BB196224DE009D99AA /* 120x120.png */,
+				60A6A9BC196224DE009D99AA /* emptyPlate.png */,
+				60A6A9BD196224DE009D99AA /* emptyPlate@2X.png */,
+				60A6A9BE196224DE009D99AA /* header-logo.png */,
+				60A6A9BF196224DE009D99AA /* header-logo@2x.png */,
+				60A6A9C0196224DE009D99AA /* Load Screen - 640x960.png */,
+				60A6A9C1196224DE009D99AA /* Load Screen - 640x1136.png */,
+				60A6A9C2196224DE009D99AA /* map-pin.png */,
+				60A6A9C3196224DE009D99AA /* map-pinPizza.png */,
+				60A6A9C4196224DE009D99AA /* pizzaCutter.png */,
+				60A6A9C5196224DE009D99AA /* pizzaCutter@2X.png */,
+				60A6A9C6196224DE009D99AA /* plateFull.png */,
+				60A6A9C7196224DE009D99AA /* plateFull@2X.png */,
 				60A6A9901960E314009D99AA /* mushrooms.png */,
 				60A6A99C1960E31F009D99AA /* pepperoni.png */,
 				60A6A99D1960E31F009D99AA /* pepperoninew.png */,
@@ -434,33 +490,59 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				60A6A9D719622695009D99AA /* Verlag Black Italic.otf in Resources */,
+				60A6A9D819622695009D99AA /* Verlag Black.otf in Resources */,
+				60A6A9D919622695009D99AA /* Verlag Bold Italic.otf in Resources */,
+				60A6A9DA19622695009D99AA /* Verlag Bold.otf in Resources */,
+				60A6A9DB19622695009D99AA /* Verlag Book Italic.otf in Resources */,
+				60A6A9DC19622695009D99AA /* Verlag Book.otf in Resources */,
+				60A6A9DD19622695009D99AA /* Verlag Light Italic.otf in Resources */,
+				60A6A9DE19622695009D99AA /* Verlag Light.otf in Resources */,
+				60A6A9DF19622695009D99AA /* Verlag XLight Italic.otf in Resources */,
+				60A6A9E019622695009D99AA /* Verlag XLight.otf in Resources */,
+				60A6A9E119622695009D99AA /* Verlag-Book.otf in Resources */,
+				60A6A9CD196224DE009D99AA /* header-logo.png in Resources */,
 				60A6A9A11960E31F009D99AA /* pepperoni.png in Resources */,
+				60A6A9D1196224DE009D99AA /* map-pin.png in Resources */,
 				60A6A9811960E2FF009D99AA /* chevron - forward@2x.png in Resources */,
 				607F55B31960DE3A00926E1A /* Main_iPad.storyboard in Resources */,
 				607F55B81960DE3A00926E1A /* Images.xcassets in Resources */,
 				60A6A98F1960E308009D99AA /* location@2x.png in Resources */,
+				60A6A9C9196224DE009D99AA /* 80x80.png in Resources */,
 				60A6A9991960E314009D99AA /* navbar@2x.png in Resources */,
 				60A6A94C1960E03A009D99AA /* SPGooglePlacesAutocompleteDemoViewController.xib in Resources */,
 				60A6A98E1960E308009D99AA /* location.png in Resources */,
+				60A6A9CE196224DE009D99AA /* header-logo@2x.png in Resources */,
+				60A6A9D0196224DE009D99AA /* Load Screen - 640x1136.png in Resources */,
+				60A6A9CC196224DE009D99AA /* emptyPlate@2X.png in Resources */,
+				60A6A9D6196224DE009D99AA /* plateFull@2X.png in Resources */,
 				60A6A98B1960E308009D99AA /* LaunchImage@2x.png in Resources */,
 				60A6A9A31960E31F009D99AA /* peppers.png in Resources */,
+				60A6A9D4196224DE009D99AA /* pizzaCutter@2X.png in Resources */,
 				60A6A9A21960E31F009D99AA /* pepperoninew.png in Resources */,
 				60A6A97F1960E2FF009D99AA /* cancelButton.jpg in Resources */,
 				607F55B01960DE3A00926E1A /* Main_iPhone.storyboard in Resources */,
+				60A6A9D2196224DE009D99AA /* map-pinPizza.png in Resources */,
 				60A6A9971960E314009D99AA /* mushroomsnew.png in Resources */,
 				60A6A99B1960E314009D99AA /* olivesnew.png in Resources */,
 				60A6A98D1960E308009D99AA /* locateButton@2x.png in Resources */,
+				60A6A9CF196224DE009D99AA /* Load Screen - 640x960.png in Resources */,
 				60A6A98C1960E308009D99AA /* locateButton.png in Resources */,
 				60A6A9741960E087009D99AA /* MJDetailViewController.xib in Resources */,
+				60A6A9D5196224DE009D99AA /* plateFull.png in Resources */,
 				60A6A99A1960E314009D99AA /* olives.png in Resources */,
 				60A6A9A91960E328009D99AA /* sausagenew.png in Resources */,
 				60A6A9A51960E31F009D99AA /* pizza.png in Resources */,
 				60A6A9891960E308009D99AA /* LaunchImage-568h@2x.png in Resources */,
+				60A6A9C8196224DE009D99AA /* 58x58.png in Resources */,
 				60A6A9981960E314009D99AA /* navbar.png in Resources */,
+				60A6A9D3196224DE009D99AA /* pizzaCutter.png in Resources */,
 				607F55A71960DE3A00926E1A /* InfoPlist.strings in Resources */,
 				60A6A98A1960E308009D99AA /* LaunchImage.png in Resources */,
 				60A6A9A81960E328009D99AA /* sausage.png in Resources */,
+				60A6A9CA196224DE009D99AA /* 120x120.png in Resources */,
 				60A6A9961960E314009D99AA /* mushrooms.png in Resources */,
+				60A6A9CB196224DE009D99AA /* emptyPlate.png in Resources */,
 				60A6A9A41960E31F009D99AA /* peppersnew.png in Resources */,
 				60A6A9801960E2FF009D99AA /* checkComplete.jpg in Resources */,
 			);

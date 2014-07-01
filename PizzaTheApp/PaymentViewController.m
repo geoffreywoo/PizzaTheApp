@@ -35,7 +35,7 @@
 @implementation PaymentViewController
 
 - (void)viewDidLoad {
-    
+    CGRect screenRect = [[UIScreen mainScreen] bounds];
     [super viewDidLoad];
     [self setTitle:@"SETTINGS"];
 
@@ -49,20 +49,32 @@
         cardCheck.frame = CGRectMake(275, 125, 35, 35);
         cardCheck.tag = 200;
         [cardCheck addTarget:self action:@selector(cancelCard:) forControlEvents:UIControlEventTouchUpInside];
-        [self.view addSubview:cardCheck];
+        
+        UILabel *storedCCLabel = [[UILabel alloc] initWithFrame:CGRectMake(25, 120, screenRect.size.width, 55)];
+        storedCCLabel.textColor = [UIColor colorWithRed:0.0f green:0.0f blue:0.0f alpha:0.45f];
+        storedCCLabel.text = [[NSUserDefaults standardUserDefaults] objectForKey:@"displayString"];
+        storedCCLabel.font = [UIFont fontWithName:@"Verlag-Bold" size:17];
+        [self.view addSubview:storedCCLabel];
+        
+        
         UIImageView *cardCheckImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:[NSString stringWithFormat:@"plateFull.png"]]];
         cardCheckImage.frame = CGRectMake(0, 0, 35, 35);
         [cardCheck addSubview:cardCheckImage];
+        [self.view addSubview:cardCheck];
         
     } else {
+        /*
         UIImageView *noCardCheck = [[UIImageView alloc] initWithImage:[UIImage imageNamed:[NSString stringWithFormat:@"emptyPlate.png"]]];
         noCardCheck.frame = CGRectMake(275, 125, 35, 35);
         noCardCheck.tag = 100;
         [self.view addSubview:noCardCheck];
+        */
+        self.stripeView = [[STPView alloc] initWithFrame:CGRectMake(0,120,screenRect.size.width,55)
+                                                  andKey:STRIPE_KEY];
+        self.stripeView.delegate = self;
+        
+        [self.view addSubview:self.stripeView];
     }
-    
-    
-    
     
     // IF PHONE IS SAVED, CHANGE THE DISPLAY
     if([[NSUserDefaults standardUserDefaults] objectForKey:@"customerPhone"]!=nil){
@@ -80,13 +92,7 @@
         noPhoneCheck.tag = 50;
         [self.view addSubview:noPhoneCheck];
     }
-    
-    CGRect screenRect = [[UIScreen mainScreen] bounds];
-    self.stripeView = [[STPView alloc] initWithFrame:CGRectMake(-2,120,screenRect.size.width+2,55)
-                                              andKey:STRIPE_KEY];
-    self.stripeView.delegate = self;
-    
-    [self.view addSubview:self.stripeView];
+
     
     
     // FIRST TIME LOADING
@@ -279,9 +285,6 @@
                     [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"customerID"];
                 }
                 
-                PKView * obje = [[PKView  alloc]init];
-                //[obje setupCardNumberField];
-                
                 UIView * v = [self.view viewWithTag:200];
                 if (v != nil) {
                     [v removeFromSuperview];
@@ -291,6 +294,12 @@
                 noPhoneCheck.frame = CGRectMake(275, 125, 35, 35);
                 noPhoneCheck.tag = 100;
                 [self.view addSubview:noPhoneCheck];
+                
+                CGRect screenRect = [[UIScreen mainScreen] bounds];
+                self.stripeView = [[STPView alloc] initWithFrame:CGRectMake(0,120,screenRect.size.width,55)
+                                                              andKey:STRIPE_KEY];
+                self.stripeView.delegate = self;
+                [self.view addSubview:self.stripeView];
                 
                 break;
         }
@@ -391,19 +400,17 @@
             [v removeFromSuperview];
         }
     } else {
+        /*
         UIImageView *noCardCheck = [[UIImageView alloc] initWithImage:[UIImage imageNamed:[NSString stringWithFormat:@"emptyPlate.png"]]];
         noCardCheck.frame = CGRectMake(275, 125, 35, 35);
         noCardCheck.tag = 100;
         [self.view addSubview:noCardCheck];
+         */
         UIView * v = [self.view viewWithTag:200];
         if (v != nil) {
             [v removeFromSuperview];
         }
     }
-    
-    //?????
-    PKView * obje = [[PKView  alloc]init];
-   // [obje setupCardNumberField];
     
     if([[NSUserDefaults standardUserDefaults] objectForKey:@"customerPhone"]!=nil){
         UIImageView *phoneCheck = [[UIImageView alloc] initWithImage:[UIImage imageNamed:[NSString stringWithFormat:@"plateFull.png"]]];
@@ -543,9 +550,28 @@
     [[NSUserDefaults standardUserDefaults] synchronize];
 
     [manager POST:@"https://pizzatheapp-staging.herokuapp.com/api/customers/" parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        /*
+        NSError *error;
+        NSObject *o =[NSJSONSerialization JSONObjectWithData:responseObject
+                                                     options:NSJSONReadingMutableContainers
+                                                      error:&error];
+        */
         NSLog(@"JSON: %@", responseObject);
         NSLog(@"Customer ID:%@", [responseObject objectForKey:@"id"]);
+        
 
+        
+        
+        id cardsContainer = [responseObject objectForKey:@"cards"];
+        id data = [cardsContainer objectForKey:@"data"];
+        NSLog(@"data: %@",data);
+        id obj = [data objectAtIndex:0];
+        NSLog(@"obj: %@",obj);
+         
+         NSString *displayString = [NSString stringWithFormat:@"•••• •••• •••• %@  %@/%@",[obj objectForKey:@"last4"],[obj objectForKey:@"exp_month"],[obj objectForKey:@"exp_year"]];
+         [[NSUserDefaults standardUserDefaults] setObject:displayString forKey:@"displayString"];
+         [[NSUserDefaults standardUserDefaults] synchronize];
+        
         // SAVE CUSTOMER ID
         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
         [defaults setObject:[responseObject objectForKey:@"id"] forKey:@"customerID"];

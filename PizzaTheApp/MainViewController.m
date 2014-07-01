@@ -42,31 +42,7 @@
 
 @implementation MainViewController
 
-- (void)viewDidLoad
-
-{
-    
-    [super viewDidLoad];
-    
-   //[[vlytics sharedInstance] crash];
-    //[[NSUserDefaults standardUserDefaults] removeObjectForKey:@"chosenToppings"];
-    
-    /*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++//
-     |
-     |   TOP OF PAGE IMAGE
-     |
-     |+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
-    
-    UIImage *titleImage = [UIImage imageNamed:@"header-logo.png"];
-    self.navigationItem.titleView = [[UIImageView alloc] initWithImage:titleImage];
-    
-    /*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++//
-     |
-     |   FETCH PRICES OF PIZZA & TOPPINGS
-     |
-     |+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
-    
-    
+- (void) initPrices {
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     NSString *stringForPrices = API_CONFIG;
     [manager GET:[NSString stringWithFormat:@"%@",stringForPrices] parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
@@ -90,16 +66,9 @@
         NSLog(@"Error: %@", error.description);
     }];
     
-    
-    
-    
-    
-    /*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++//
-     |
-     |   SET LAST FOUR and EXPIRY INFO
-     |
-     |+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
-    
+}
+
+- (void) fetchCustomerData {
     if([[NSUserDefaults standardUserDefaults] objectForKey:@"customerID"]!=nil){
         //https://pizzatheapp-staging.herokuapp.com/api/customers/cus_4Bbh2EUpfzGogn/card
         AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
@@ -111,7 +80,7 @@
             NSLog(@"Exp Month: %@",[responseObject objectForKey:@"exp_month"]);
             NSLog(@"Last Four: %@",[responseObject objectForKey:@"last4"]);
             
-            NSString *displayString = [NSString stringWithFormat:@"•••• •••• %@  %@/%@",[responseObject objectForKey:@"last4"],[responseObject objectForKey:@"exp_month"],[responseObject objectForKey:@"exp_year"]];
+            NSString *displayString = [NSString stringWithFormat:@"•••• •••• •••• %@  %@/%@",[responseObject objectForKey:@"last4"],[responseObject objectForKey:@"exp_month"],[responseObject objectForKey:@"exp_year"]];
             [[NSUserDefaults standardUserDefaults] setObject:displayString forKey:@"displayString"];
             [[NSUserDefaults standardUserDefaults] synchronize];
             
@@ -121,30 +90,10 @@
             NSLog(@"Error customer card: %@", error.description);
         }];
     }
-    
-    
-    /*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++//
-     |
-     |   FIRST TIME LOADING SCRIPT
-     |
-     |+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+}
 
-    // CHANGE THIS LATTERRRR!!!
-    //[[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"HasLaunchedOnce"];
-    //[[NSUserDefaults standardUserDefaults] synchronize];
-
-    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"HasLaunchedOnce"]){
-        [self.navigationItem setHidesBackButton:YES];
-    } else {
-        [self.navigationItem setHidesBackButton:YES];
-        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main_iPhone" bundle:nil];
-        PizzaViewController *sec= [storyboard instantiateViewControllerWithIdentifier:@"PizzaViewController"];
-        [self.navigationController pushViewController:sec animated:YES];
-    }
-    
-    //self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemOrganize target:self action:@selector(goToPaymentPage:)];
-    
-    
+- (void) settingsButton {
+    NSLog(@"settingsButton");
     UIImage *faceImage = [UIImage imageNamed:@"pizzaCutter.png"];
     UIButton *face = [UIButton buttonWithType:UIButtonTypeCustom];
     face.bounds = CGRectMake( 0, 0, faceImage.size.width, faceImage.size.height );//set bound as per you want
@@ -152,101 +101,10 @@
     [face setImage:faceImage forState:UIControlStateNormal];
     UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithCustomView:face];
     self.navigationItem.leftBarButtonItem = backButton;
-    
-    
-    
-    
-    
-    self.view.backgroundColor = backgroundGrey;
-    
-    // Do any additional setup after loading the view from its nib.
-    
-    [self setTitle:@"REVIEW YOUR ORDER"];
-    
-    screenRect = [[UIScreen mainScreen] bounds];
-    
-    
-    UILabel *pizzaOrderLabel = [[UILabel alloc] initWithFrame:CGRectMake(15, 210, screenRect.size.width, 50)];
-    pizzaOrderLabel.textColor = [UIColor colorWithRed:0.0f green:0.0f blue:0.0f alpha:0.45f];
-    pizzaOrderLabel.text = [NSString stringWithFormat:@"YOUR PIZZA"];
-    pizzaOrderLabel.font = [UIFont fontWithName:@"Verlag-Bold" size:11];
-    [self.view addSubview:pizzaOrderLabel];
-    
-    
-    goToPizzaPage = [UIButton buttonWithType:UIButtonTypeCustom ];
-    goToPizzaPage.frame = CGRectMake(-1, 250, screenRect.size.width+2, 85);
-    [goToPizzaPage setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-    goToPizzaPage.backgroundColor = [UIColor whiteColor];
-    [[goToPizzaPage layer] setMasksToBounds:YES];
-    [[goToPizzaPage layer] setBorderWidth:0.5f];
-    [[goToPizzaPage layer] setBorderColor:strokeGrey.CGColor];
-    [goToPizzaPage addTarget:self action:@selector(goToPizzaPage:) forControlEvents:UIControlEventTouchUpInside];
-    [goToPizzaPage setContentHorizontalAlignment:UIControlContentHorizontalAlignmentLeft];
-    goToPizzaPage.titleLabel.lineBreakMode = NSLineBreakByWordWrapping;
-    [goToPizzaPage.titleLabel setFont:[UIFont fontWithName:@"Verlag-Bold" size:15]];
-    [goToPizzaPage setTitleEdgeInsets:UIEdgeInsetsMake(-5.0f, 15.0f, 0.0f, screenRect.size.width/3)];
+}
 
-    
-    
-    /*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++//
-     |
-     |   THIS DESCRIBES THE PIZZA TOPPINGS
-     |
-     |+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
-
-    
-    NSMutableString *pizzaDescription = [NSMutableString stringWithFormat:@"Large"];
-    [chosenToppings removeAllObjects];
-    NSUserDefaults *pizzaFetcher = [NSUserDefaults standardUserDefaults];
-    chosenToppings = [[pizzaFetcher objectForKey:@"chosenToppings"] mutableCopy];
-    
-    for(int i = 0; i < [chosenToppings count]; i++){
-        if([[chosenToppings objectAtIndex:i] isEqualToString:@"none"]){
-            // Do nothing
-        } else {
-            [pizzaDescription appendString:[NSString stringWithFormat:@" %@,", [chosenToppings objectAtIndex:i]]];
-        }
-    }
-    [pizzaDescription appendString:[NSString stringWithFormat:@" pizza"]];
-    [goToPizzaPage setTitle:[NSString stringWithFormat:@"%@", pizzaDescription] forState:UIControlStateNormal];
-    [self.view addSubview:goToPizzaPage];
-    
-    
-    // Add pizza background image to button
-    pizzaImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:[NSString stringWithFormat:@"pizza.png"]]];
-    pizzaImage.frame = CGRectMake(screenRect.size.width-100, -50, 260, 260);
-    [goToPizzaPage addSubview:pizzaImage];
-    
-    
-    
-    UIImageView *chevronRight = [[UIImageView alloc] initWithImage:[UIImage imageNamed:[NSString stringWithFormat:@"chevron - forward@2x.png"]]];
-    chevronRight.frame = CGRectMake(screenRect.size.width-50, (goToPizzaPage.frame.size.height/2)-20, 30, 40);
-    // [goToPizzaPage addSubview:chevronRight];
-    
-    
-    NSArray *viewsToRemove = [pizzaImage subviews];
-    for (UIView *v in viewsToRemove) {
-        [v removeFromSuperview];
-    }
-    
-    if(chosenToppings != nil || [chosenToppings count]==0){
-        for(int i = 0; i < [chosenToppings count]; i++){
-            if(![[chosenToppings objectAtIndex:i] isEqualToString:@"none"]){
-                UIImageView *toppingForButton = [[UIImageView alloc] initWithImage:[UIImage imageNamed:[NSString stringWithFormat:@"%@new.png",[chosenToppings objectAtIndex:i]]]];
-                toppingForButton.frame = CGRectMake(0, 0, 260, 260);
-                [pizzaImage addSubview:toppingForButton];
-            }
-        }
-    }
-    
-    
-    
-    /*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++//
-     |
-     |   THIS DESCRIBES THE DELIVERY INFORMATION
-     |
-     |+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
-    
+- (void) deliveryLabel {
+    NSLog(@"delivery label");
     UILabel *deliveryLabel = [[UILabel alloc] initWithFrame:CGRectMake(15, 53, screenRect.size.width, 95)];
     deliveryLabel.textColor = [UIColor colorWithRed:0.0f green:0.0f blue:0.0f alpha:0.45f];
     deliveryLabel.text = [NSString stringWithFormat:@"DELIVER TO"];
@@ -279,17 +137,76 @@
     [[deliveryPage layer] setBorderColor:strokeGrey.CGColor];
     [deliveryPage addTarget:self action:@selector(GoToMapSearchPage:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:deliveryPage];
+}
+
+- (void) yourPizzaLabel {
+    NSLog(@"yourPizzaLabel");
+    screenRect = [[UIScreen mainScreen] bounds];
+    
+    UILabel *pizzaOrderLabel = [[UILabel alloc] initWithFrame:CGRectMake(15, 210, screenRect.size.width, 50)];
+    pizzaOrderLabel.textColor = [UIColor colorWithRed:0.0f green:0.0f blue:0.0f alpha:0.45f];
+    pizzaOrderLabel.text = [NSString stringWithFormat:@"YOUR PIZZA"];
+    pizzaOrderLabel.font = [UIFont fontWithName:@"Verlag-Bold" size:11];
+    [self.view addSubview:pizzaOrderLabel];
+    
+    goToPizzaPage = [UIButton buttonWithType:UIButtonTypeCustom ];
+    goToPizzaPage.frame = CGRectMake(-1, 250, screenRect.size.width+2, 85);
+    [goToPizzaPage setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    goToPizzaPage.backgroundColor = [UIColor whiteColor];
+    [[goToPizzaPage layer] setMasksToBounds:YES];
+    [[goToPizzaPage layer] setBorderWidth:0.5f];
+    [[goToPizzaPage layer] setBorderColor:strokeGrey.CGColor];
+    [goToPizzaPage addTarget:self action:@selector(goToPizzaPage:) forControlEvents:UIControlEventTouchUpInside];
+    [goToPizzaPage setContentHorizontalAlignment:UIControlContentHorizontalAlignmentLeft];
+    goToPizzaPage.titleLabel.lineBreakMode = NSLineBreakByWordWrapping;
+    [goToPizzaPage.titleLabel setFont:[UIFont fontWithName:@"Verlag-Bold" size:15]];
+    [goToPizzaPage setTitleEdgeInsets:UIEdgeInsetsMake(-5.0f, 15.0f, 0.0f, screenRect.size.width/3)];
+    
+    NSMutableString *pizzaDescription = [NSMutableString stringWithFormat:@"Large"];
+    [chosenToppings removeAllObjects];
+    NSUserDefaults *pizzaFetcher = [NSUserDefaults standardUserDefaults];
+    chosenToppings = [[pizzaFetcher objectForKey:@"chosenToppings"] mutableCopy];
+    
+    for(int i = 0; i < [chosenToppings count]; i++){
+        if([[chosenToppings objectAtIndex:i] isEqualToString:@"none"]){
+            // Do nothing
+        } else {
+            [pizzaDescription appendString:[NSString stringWithFormat:@" %@,", [chosenToppings objectAtIndex:i]]];
+        }
+    }
+    [pizzaDescription appendString:[NSString stringWithFormat:@" pizza"]];
+    [goToPizzaPage setTitle:[NSString stringWithFormat:@"%@", pizzaDescription] forState:UIControlStateNormal];
+    [self.view addSubview:goToPizzaPage];
     
     
+    // Add pizza background image to button
+    pizzaImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:[NSString stringWithFormat:@"pizza.png"]]];
+    pizzaImage.frame = CGRectMake(screenRect.size.width-100, -50, 260, 260);
+    [goToPizzaPage addSubview:pizzaImage];
     
+    /*
+     UIImageView *chevronRight = [[UIImageView alloc] initWithImage:[UIImage imageNamed:[NSString stringWithFormat:@"chevron - forward@2x.png"]]];
+     chevronRight.frame = CGRectMake(screenRect.size.width-50, (goToPizzaPage.frame.size.height/2)-20, 30, 40);
+     [goToPizzaPage addSubview:chevronRight];
+     */
     
-    /*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++//
-     |
-     |   THIS CREATES THE CONFIRMATION BUTTON
-     |
-     |+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+    NSArray *viewsToRemove = [pizzaImage subviews];
+    for (UIView *v in viewsToRemove) {
+        [v removeFromSuperview];
+    }
     
-    
+    if(chosenToppings != nil || [chosenToppings count]==0){
+        for(int i = 0; i < [chosenToppings count]; i++){
+            if(![[chosenToppings objectAtIndex:i] isEqualToString:@"none"]){
+                UIImageView *toppingForButton = [[UIImageView alloc] initWithImage:[UIImage imageNamed:[NSString stringWithFormat:@"%@new.png",[chosenToppings objectAtIndex:i]]]];
+                toppingForButton.frame = CGRectMake(0, 0, 260, 260);
+                [pizzaImage addSubview:toppingForButton];
+            }
+        }
+    }
+}
+
+- (void) confirmButton {
     int price = [[NSUserDefaults standardUserDefaults] integerForKey:@"basePrice"]+[[NSUserDefaults standardUserDefaults] integerForKey:@"tipPrice"];
     for(int i = 0; i < [chosenToppings count]; i++){
         if([[chosenToppings objectAtIndex:i] isEqualToString:@"none"]){
@@ -316,155 +233,37 @@
     priceLabel.text = [NSString stringWithFormat:@"$%d",price];
     priceLabel.font = [UIFont fontWithName:@"Verlag-Bold" size:18];
     [confirmButton addSubview:priceLabel];
-    
 }
 
+- (void) viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    UIImage *titleImage = [UIImage imageNamed:@"header-logo.png"];
+    self.navigationItem.titleView = [[UIImageView alloc] initWithImage:titleImage];
+    
+    [self.view setBackgroundColor:backgroundGrey];
+ 
+    [self initPrices];
+    [self fetchCustomerData];
 
-- (void)viewWillAppear:(BOOL)animated{
-    NSArray *viewsToRemove = [pizzaImage subviews];
-    for (UIView *v in viewsToRemove) {
-        [v removeFromSuperview];
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"HasLaunchedOnce"]){
+        [self.navigationItem setHidesBackButton:YES];
+    } else {
+        [self.navigationItem setHidesBackButton:YES];
+        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main_iPhone" bundle:nil];
+        PizzaViewController *sec= [storyboard instantiateViewControllerWithIdentifier:@"PizzaViewController"];
+        [self.navigationController pushViewController:sec animated:YES];
     }
     
-    NSUserDefaults *pizzaFetcher = [NSUserDefaults standardUserDefaults];
-    chosenToppings = [[pizzaFetcher objectForKey:@"chosenToppings"] mutableCopy];
-
-    /*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++//
-     |
-     |   THIS CREATES THE PIZZA TOPPINGS SUBVIEWS
-     |
-     |+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+    [self settingsButton];
     
+    [self yourPizzaLabel];
     
-    if([pizzaFetcher objectForKey:@"chosenToppings"] != nil || [[pizzaFetcher objectForKey:@"chosenToppings"] count]==0){
-        
-        for(int i = 0; i < [chosenToppings count]; i++){
-            if(![[chosenToppings objectAtIndex:i] isEqualToString:@"none"]){
-                UIImageView *toppingForButton = [[UIImageView alloc] initWithImage:[UIImage imageNamed:[NSString stringWithFormat:@"%@new.png",[chosenToppings objectAtIndex:i]]]];
-                toppingForButton.frame = CGRectMake(0, 0, 260, 260);
-                [pizzaImage addSubview:toppingForButton];
-            }
-        }
-    }
+    [self deliveryLabel];
     
-    
-    /*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++//
-     |
-     |   THIS DESCRIBES THE PIZZA TOPPINGS
-     |
-     |+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
-    
-    NSMutableString *pizzaDescription = [NSMutableString stringWithFormat:@"Large"];
-    NSString *lastTopping;
-    
-    int numToppings = 0;
-    if(chosenToppings != nil || [chosenToppings count]==0){
-        for(int i = 0; i<[chosenToppings count]; i++){
-            if(![[chosenToppings objectAtIndex:i] isEqualToString:@"none"]){
-                numToppings++;
-                lastTopping = [chosenToppings objectAtIndex:i];
-            }
-        }
-    }
-    
-    for(int i = 0; i < [chosenToppings count]; i++){
-        if(numToppings==0){
-            [pizzaDescription appendString:[NSString stringWithFormat:@" delicious plain pizza!"]];
-        } else if (numToppings==1){
-            if(i == [chosenToppings indexOfObject:lastTopping]){
-                [pizzaDescription appendString:[NSString stringWithFormat:@" %@", lastTopping]];
-            }
-        } else if (numToppings==2){
-            if(![[chosenToppings objectAtIndex:i] isEqualToString:@"none"]){
-                if(i != [chosenToppings indexOfObject:lastTopping]){
-                    [pizzaDescription appendString:[NSString stringWithFormat:@" %@ and", [chosenToppings objectAtIndex:i]]];
-                } else {
-                    [pizzaDescription appendString:[NSString stringWithFormat:@" %@", [chosenToppings objectAtIndex:i]]];
-                }
-            }
-        } else {
-            if([[chosenToppings objectAtIndex:i] isEqualToString:@"none"]){
-                // Do nothing
-            } else {
-                if(i == [chosenToppings indexOfObject:lastTopping]){
-                    [pizzaDescription appendString:[NSString stringWithFormat:@" and %@", [chosenToppings objectAtIndex:i]]];
-                } else {
-                    [pizzaDescription appendString:[NSString stringWithFormat:@" %@,", [chosenToppings objectAtIndex:i]]];
-                }
-            }
-        }
-    }
-    if(numToppings != 0){
-        [pizzaDescription appendString:[NSString stringWithFormat:@" pizza"]];
-    }
-
-    [goToPizzaPage setTitle:[NSString stringWithFormat:@"%@", pizzaDescription] forState:UIControlStateNormal];
-    NSLog(@"%@",[pizzaFetcher objectForKey:@"chosenToppings"]);
-    
-    
-    /*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++//
-     |
-     |   THIS CREATES THE CONFIRMATION BUTTON
-     |
-     |+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
-    
-    int price = [[NSUserDefaults standardUserDefaults] integerForKey:@"basePrice"]+[[NSUserDefaults standardUserDefaults] integerForKey:@"tipPrice"];
-    for(int i = 0; i < [chosenToppings count]; i++){
-        if([[chosenToppings objectAtIndex:i] isEqualToString:@"none"]){
-            // Do nothing
-        } else {
-            price = price + [[NSUserDefaults standardUserDefaults] integerForKey:@"toppingPrice"];
-        }
-    }
-    
-    UIButton *confirmButton = [UIButton buttonWithType:UIButtonTypeCustom ];
-    confirmButton.frame = CGRectMake(0,  screenRect.size.height-50, screenRect.size.width, 50);
-    [confirmButton setTitle:[NSString stringWithFormat:@"PLACE ORDER"] forState:UIControlStateNormal];
-    confirmButton.titleLabel.font = [UIFont fontWithName:@"Verlag-Black" size:18];
-    confirmButton.layer.cornerRadius = 0;
-    confirmButton.backgroundColor = pizzaRedColor;
-    [[confirmButton layer] setMasksToBounds:YES];
-    [[confirmButton layer] setBorderWidth:0.0f];
-    [confirmButton addTarget:self action:@selector(placeOrder:) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:confirmButton];
-    
-    UILabel *priceLabel = [[UILabel alloc] initWithFrame:CGRectMake(15, 10, 300, 25)];
-    priceLabel.textColor = [UIColor colorWithRed:255.0f green:255.0f blue:255.0f alpha:0.35f];
-    priceLabel.text = [NSString stringWithFormat:@"$%d",price];
-    priceLabel.font = [UIFont fontWithName:@"Verlag-Bold" size:18];
-    [confirmButton addSubview:priceLabel];
-    
-    
-    /*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++//
-     |
-     |   SET LAST FOUR and EXPIRY INFO
-     |
-     |+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
-    
-    if([[NSUserDefaults standardUserDefaults] objectForKey:@"customerID"]!=nil){
-        //https://pizzatheapp-staging.herokuapp.com/api/customers/cus_4Bbh2EUpfzGogn/card
-        AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-        [manager GET:[NSString stringWithFormat:@"%@%@/card",API_CUSTOMERS,[[NSUserDefaults standardUserDefaults] objectForKey:@"customerID"]] parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
-            
-            
-            NSLog(@"JSON: %@", responseObject);
-            NSLog(@"Exp Year: %@",[responseObject objectForKey:@"exp_year"]);
-            NSLog(@"Exp Month: %@",[responseObject objectForKey:@"exp_month"]);
-            NSLog(@"Last Four: %@",[responseObject objectForKey:@"last4"]);
-            
-            NSString *displayString = [NSString stringWithFormat:@"•••• •••• %@  %@/%@",[responseObject objectForKey:@"last4"],[responseObject objectForKey:@"exp_month"],[responseObject objectForKey:@"exp_year"]];
-            [[NSUserDefaults standardUserDefaults] setObject:displayString forKey:@"displayString"];
-            [[NSUserDefaults standardUserDefaults] synchronize];
-            
-            
-        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-            [MBProgressHUD hideHUDForView:self.view animated:YES];
-            NSLog(@"Error customer card: %@", error.description);
-        }];
-    }
-    
+    [self confirmButton];
 }
-
 
 
 
@@ -491,14 +290,20 @@
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
+    NSUserDefaults *orderInfo = [NSUserDefaults standardUserDefaults];
+    NSString *customerID = [orderInfo objectForKey:@"customerID"];
+    
+    
     switch(buttonIndex) {
         case 0: //"No" pressed
             //do something?
             break;
         case 1: //"Yes" pressed
-            //here you pop the viewController
-            //[self.navigationController popViewControllerAnimated:YES];
-            [self getRestaurantIDs];
+            if ( (customerID == nil) || ([customerID isEqualToString:@""]) ) {
+                [self goToPaymentPage:nil];
+            } else {
+                [self getRestaurantIDs];
+            }
             break;
     }
 }
@@ -642,16 +447,12 @@
     if(zipCode==NULL || streetAddress==NULL ){
         UIViewController *sec=[[SPGooglePlacesAutocompleteDemoViewController alloc] initWithNibName:@"SPGooglePlacesAutocompleteDemoViewController" bundle:nil];
         [self.navigationController pushViewController:sec animated:YES];
-        customerID = @"0000";
-  /*  } else if(customerID==NULL || phoneNumber==NULL || customerID==nil || phoneNumber==nil){
+    } else if(customerID==NULL || phoneNumber==NULL || customerID==nil || phoneNumber==nil){
         NSLog(@"nil information");
         UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main_iPhone" bundle:nil];
-        PizzaViewController *sec= [storyboard instantiateViewControllerWithIdentifier:@"PizzaViewController"];
-        [self.navigationController pushViewController:sec animated:YES];*/
+        PizzaViewController *sec= [storyboard instantiateViewControllerWithIdentifier:@"PaymentViewController"];
+        [self.navigationController pushViewController:sec animated:YES];
     } else {
-        //@"restaurantIds": restaurantIDList,
-        //@"fetchRestaurants": @"true",
-        
         NSMutableArray *restaurantIDList = [[orderInfo objectForKey:@"restaurantIDs"] mutableCopy];
         NSLog(@"restaurant id list: %@",restaurantIDList);
         NSMutableArray *formattedToppingsForSubmission = [[orderInfo objectForKey:@"formattedToppingsForSubmission"] mutableCopy];
@@ -662,7 +463,7 @@
                                  @"stripeCustomerId": customerID,
                                  @"firstName": @"Joey",
                                  @"lastName": @"Pepperoni",
-                                 @"email": @"joseph.c.vasquez@gmail.com",
+                                 @"email": @"",
                                  @"delivery_address": streetAddress,
                                  @"delivery_apartment": @"",
                                  @"delivery_zip": zipCode,
@@ -734,7 +535,7 @@
 
 -(IBAction)goToPaymentPage:(id)sender{
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main_iPhone" bundle:nil];
-    PizzaViewController *sec= [storyboard instantiateViewControllerWithIdentifier:@"PaymentViewController"];
+    PaymentViewController *sec= [storyboard instantiateViewControllerWithIdentifier:@"PaymentViewController"];
     [self.navigationController pushViewController:sec animated:YES];
 }
 
