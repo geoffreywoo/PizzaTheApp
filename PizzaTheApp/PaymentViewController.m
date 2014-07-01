@@ -104,12 +104,12 @@
         UIView * phone = [self.view viewWithTag:150];
         UIView * card = [self.view viewWithTag:200];
         if (phone != nil && card != nil) {
-            saveButton.enabled = YES;
+            saveButton.enabled = NO;
         }
     } else {
         // Setup next button
         saveButton = [[UIBarButtonItem alloc] initWithTitle:@"Next" style:UIBarButtonItemStyleDone target:self action:@selector(save:)];
-        saveButton.enabled = YES;
+        saveButton.enabled = NO;
         
         UIView * phone = [self.view viewWithTag:150];
         UIView * card = [self.view viewWithTag:200];
@@ -148,13 +148,13 @@
     [self.view addSubview:noteLabel];
     
     
-    CGRect phoneNumberFrame = CGRectMake(-2, 210, screenRect.size.width+4, 46);
+    CGRect phoneNumberFrame = CGRectMake(0, 210, screenRect.size.width, 46);
     phoneNumberField = [[UITextField alloc] initWithFrame:phoneNumberFrame];
     if([[NSUserDefaults standardUserDefaults] objectForKey:@"customerPhone"]!=NULL){
         phoneNumberField.enabled = NO;
-        phoneNumberField.placeholder = [NSString stringWithFormat:@"    %@",[[NSUserDefaults standardUserDefaults] objectForKey:@"customerPhone"]];
+        phoneNumberField.placeholder = [NSString stringWithFormat:@"%@",[[NSUserDefaults standardUserDefaults] objectForKey:@"customerPhone"]];
     } else {
-        phoneNumberField.placeholder = @"    Phone Number";
+        phoneNumberField.placeholder = @"Phone Number";
     }
     
     phoneNumberField.backgroundColor = [UIColor whiteColor];
@@ -182,7 +182,7 @@
     [self.view addSubview:mySwitch];*/
     
     if([[NSUserDefaults standardUserDefaults] objectForKey:@"customerPhone"]==NULL || [[NSUserDefaults standardUserDefaults] objectForKey:@"customerID"]==NULL){
-        saveButton.enabled = YES;
+        saveButton.enabled = NO;
     } else {
         saveButton.enabled = YES;
     }
@@ -221,7 +221,7 @@
     }
     
     if([[NSUserDefaults standardUserDefaults] objectForKey:@"customerPhone"]==NULL || [[NSUserDefaults standardUserDefaults] objectForKey:@"customerID"]==NULL){
-        saveButton.enabled = YES;
+        saveButton.enabled = NO;
     } else {
         saveButton.enabled = YES;
     }
@@ -495,6 +495,14 @@
 }
 
 - (IBAction)save:(id)sender{
+    NSLog(@"saving");
+    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    if (self.stripeView == nil) {
+        [phoneNumberField resignFirstResponder];
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
+        phoneNumberField.enabled = NO;
+        return;
+    }
     /*if([[NSUserDefaults standardUserDefaults] objectForKey:@"customerPhone"]==NULL || [[NSUserDefaults standardUserDefaults] objectForKey:@"customerID"]==NULL){
         [MBProgressHUD showHUDAddedTo:self.view animated:YES];
         
@@ -512,7 +520,7 @@
         [[self navigationController] popToRootViewControllerAnimated:YES];
     } */
     
-    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    
     
     [self.stripeView createToken:^(STPToken *token, NSError *error) {
         if (error) {
