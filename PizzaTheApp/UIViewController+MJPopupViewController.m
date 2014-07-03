@@ -124,7 +124,7 @@ static void * const keypath = (void*)&keypath;
     UILabel *successLabel = [[UILabel alloc] initWithFrame:CGRectMake(5, 5, popupView.frame.size.width-10, popupView.frame.size.height-10)];
     successLabel.textColor = [UIColor blackColor];
     successLabel.text = [NSString stringWithFormat:@"YOUR PIZZA IS ON ITS WAY!"];
-    successLabel.font = [UIFont fontWithName:@"Verlag-BlackItalic" size:15];
+    successLabel.font = [UIFont fontWithName:@"Verlag-Black" size:15];
     successLabel.textAlignment = NSTextAlignmentCenter;
     [popupView addSubview:successLabel];
     

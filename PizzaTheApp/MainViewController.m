@@ -17,12 +17,21 @@
 #import "AFNetworking.h"
 
 //#import <Crashlytics/Crashlytics.h>
-
+/*
 #define STRIPE_KEY @"pk_test_9wPOvSKQ8o5EsuXDWUIBjzlQ"
 #define API_CONFIG @"https://pizzatheapp-staging.herokuapp.com/api/config"
 #define API_ORDERS @"https://pizzatheapp-staging.herokuapp.com/api/orders"
 #define API_CUSTOMERS @"https://pizzatheapp-staging.herokuapp.com/api/customers/"
 #define BASE_URL_RESTAURANTS @"https://pizzatheapp-staging.herokuapp.com/api/closest-restaurants?"
+*/
+
+#define STRIPE_KEY @"pk_live_5l59z07mDTFiUSSxp9UGBYxr"
+#define API_CONFIG @"https://pizzatheapp.herokuapp.com/api/config"
+#define API_ORDERS @"https://pizzatheapp.herokuapp.com/api/orders"
+#define API_CUSTOMERS @"https://pizzatheapp.herokuapp.com/api/customers/"
+#define API_CHECK_PRICES_ZIP @"https://pizzatheapp.herokuapp.com/api/basePrice/"
+#define BASE_URL_RESTAURANTS @"https://pizzatheapp.herokuapp.com/api/closest-restaurants?"
+
 #define RGB(r,g,b) [UIColor colorWithRed:r/255.0f green:g/255.0f blue:b/255.0f alpha:1.0f]
 #define pizzaRedColor RGB(195,36,43)
 #define backgroundGrey RGB(248,248,248)
@@ -41,6 +50,47 @@
 @end
 
 @implementation MainViewController
+
+- (void) displayPrice {
+    int price = [[NSUserDefaults standardUserDefaults] integerForKey:@"basePrice"]+[[NSUserDefaults standardUserDefaults] integerForKey:@"tipPrice"];
+    for(int i = 0; i < [chosenToppings count]; i++){
+        if([[chosenToppings objectAtIndex:i] isEqualToString:@"none"]){
+            // Do nothing
+        } else {
+            price = price + [[NSUserDefaults standardUserDefaults] integerForKey:@"toppingPrice"];
+        }
+    }
+    NSLog(@"%d", price);
+    self.priceLabel.text = [NSString stringWithFormat:@"$%d",price];
+}
+
+- (void) checkPrices {
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    NSString *stringForPrices = API_CHECK_PRICES_ZIP;
+    
+    [manager GET:[NSString stringWithFormat:@"%@%@",stringForPrices,[[NSUserDefaults standardUserDefaults] objectForKey:@"zipCode"]] parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSLog(@"JSON: %@", responseObject);
+        
+        int toppingPrice = [[responseObject objectForKey:@"TOPPING_PRICE_CENTS"] intValue]/100;
+        int tipPrice = [[responseObject objectForKey:@"TIP_CENTS"] intValue]/100;
+        int basePrice = [[responseObject objectForKey:@"BASE_PRICE_CENTS"] intValue]/100;
+        NSLog(@"Topping Price %d", toppingPrice);
+        NSLog(@"tip Price %d", tipPrice);
+        NSLog(@"Base Price %d", basePrice);
+        
+        NSUserDefaults *pricingStore = [NSUserDefaults standardUserDefaults];
+        [pricingStore setInteger:toppingPrice forKey:@"toppingPrice"];
+        [pricingStore setInteger:tipPrice forKey:@"tipPrice"];
+        [pricingStore setInteger:basePrice forKey:@"basePrice"];
+        [pricingStore synchronize];
+        
+        [self displayPrice];
+        
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
+        NSLog(@"Error: %@", error.description);
+    }];
+}
 
 - (void) initPrices {
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
@@ -94,9 +144,9 @@
 
 - (void) settingsButton {
     NSLog(@"settingsButton");
-    UIImage *faceImage = [UIImage imageNamed:@"pizzaCutter.png"];
+    UIImage *faceImage = [UIImage imageNamed:@"settings2-icon.png"];
     UIButton *face = [UIButton buttonWithType:UIButtonTypeCustom];
-    face.bounds = CGRectMake( 0, 0, faceImage.size.width, faceImage.size.height );//set bound as per you want
+    face.bounds = CGRectMake( 0, 0, 30, 30);//set bound as per you want
     [face addTarget:self action:@selector(goToPaymentPage:) forControlEvents:UIControlEventTouchUpInside];
     [face setImage:faceImage forState:UIControlStateNormal];
     UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithCustomView:face];
@@ -167,12 +217,30 @@
     NSUserDefaults *pizzaFetcher = [NSUserDefaults standardUserDefaults];
     chosenToppings = [[pizzaFetcher objectForKey:@"chosenToppings"] mutableCopy];
     
+    int numToppings = 0;
     for(int i = 0; i < [chosenToppings count]; i++){
         if([[chosenToppings objectAtIndex:i] isEqualToString:@"none"]){
             // Do nothing
         } else {
-            [pizzaDescription appendString:[NSString stringWithFormat:@" %@,", [chosenToppings objectAtIndex:i]]];
+            numToppings++;
         }
+    }
+    if (numToppings != 0) {
+        int printedToppings = 0;
+        for(int i = 0; i < [chosenToppings count]; i++){
+            if([[chosenToppings objectAtIndex:i] isEqualToString:@"none"]){
+                // Do nothing
+            } else {
+                printedToppings++;
+                if (printedToppings < numToppings) {
+                    [pizzaDescription appendString:[NSString stringWithFormat:@" %@,", [chosenToppings objectAtIndex:i]]];
+                } else {
+                    [pizzaDescription appendString:[NSString stringWithFormat:@" %@", [chosenToppings objectAtIndex:i]]];
+                }
+            }
+        }
+    } else {
+        [pizzaDescription appendString:[NSString stringWithFormat:@" plain and cheesy"]];
     }
     [pizzaDescription appendString:[NSString stringWithFormat:@" pizza"]];
     [goToPizzaPage setTitle:[NSString stringWithFormat:@"%@", pizzaDescription] forState:UIControlStateNormal];
@@ -206,33 +274,25 @@
     }
 }
 
-- (void) confirmButton {
-    int price = [[NSUserDefaults standardUserDefaults] integerForKey:@"basePrice"]+[[NSUserDefaults standardUserDefaults] integerForKey:@"tipPrice"];
-    for(int i = 0; i < [chosenToppings count]; i++){
-        if([[chosenToppings objectAtIndex:i] isEqualToString:@"none"]){
-            // Do nothing
-        } else {
-            price = price + [[NSUserDefaults standardUserDefaults] integerForKey:@"toppingPrice"];
-        }
-    }
-    NSLog(@"%d", price);
+- (void) placeConfirmButton {
+    self.confirmButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    self.confirmButton.frame = CGRectMake(0,  screenRect.size.height-50, screenRect.size.width, 50);
+    [self.confirmButton setTitle:[NSString stringWithFormat:@"PLACE ORDER"] forState:UIControlStateNormal];
+    self.confirmButton.titleLabel.font = [UIFont fontWithName:@"Verlag-Black" size:16];
+    self.confirmButton.layer.cornerRadius = 0;
+    self.confirmButton.backgroundColor = pizzaRedColor;
+    [[self.confirmButton layer] setMasksToBounds:YES];
+    [[self.confirmButton layer] setBorderWidth:0.0f];
+    [self.confirmButton addTarget:self action:@selector(placeOrder:) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:self.confirmButton];
     
-    UIButton *confirmButton = [UIButton buttonWithType:UIButtonTypeCustom ];
-    confirmButton.frame = CGRectMake(0,  screenRect.size.height-50, screenRect.size.width, 50);
-    [confirmButton setTitle:[NSString stringWithFormat:@"PLACE ORDER"] forState:UIControlStateNormal];
-    confirmButton.titleLabel.font = [UIFont fontWithName:@"Verlag-Black" size:16];
-    confirmButton.layer.cornerRadius = 0;
-    confirmButton.backgroundColor = pizzaRedColor;
-    [[confirmButton layer] setMasksToBounds:YES];
-    [[confirmButton layer] setBorderWidth:0.0f];
-    [confirmButton addTarget:self action:@selector(placeOrder:) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:confirmButton];
+    self.priceLabel = [[UILabel alloc] initWithFrame:CGRectMake(15, 4, 40, 40)];
+    // [priceLabel setBackgroundColor:[UIColor blueColor]];
+    self.priceLabel.textColor = [UIColor colorWithRed:255.0f green:255.0f blue:255.0f alpha:0.75f];
+    self.priceLabel.font = [UIFont fontWithName:@"Verlag-Black" size:20];
+    [self.confirmButton addSubview:self.priceLabel];
     
-    UILabel *priceLabel = [[UILabel alloc] initWithFrame:CGRectMake(15, 10, 300, 5)];
-    priceLabel.textColor = [UIColor colorWithRed:255.0f green:255.0f blue:255.0f alpha:0.35f];
-    priceLabel.text = [NSString stringWithFormat:@"$%d",price];
-    priceLabel.font = [UIFont fontWithName:@"Verlag-Bold" size:18];
-    [confirmButton addSubview:priceLabel];
+    [self displayPrice];
 }
 
 - (void) viewWillAppear:(BOOL)animated
@@ -262,7 +322,9 @@
     
     [self deliveryLabel];
     
-    [self confirmButton];
+    [self placeConfirmButton];
+    
+    [self checkPrices];
 }
 
 
@@ -280,31 +342,41 @@
 
 - (void)placeOrder:(UIBarButtonItem *)sender
 {
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Confirm Order"
-                                                    message:@"Are you ready for some pizza?"
-                                                   delegate:self
-                                          cancelButtonTitle:@"No"
-                                          otherButtonTitles:@"Yes", nil];
-    [alert show];
+    NSUserDefaults *orderInfo = [NSUserDefaults standardUserDefaults];
+    NSString *customerID = [orderInfo objectForKey:@"customerID"];
+    if ( (customerID == nil) || ([customerID isEqualToString:@""]) ) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Payments"
+                                                        message:@"Let's get your payment information."
+                                                       delegate:self
+                                              cancelButtonTitle:@"OK"
+                                              otherButtonTitles:nil];
+        alert.tag = 2;
+        [alert show];
+    } else {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Confirm Order"
+                                                        message:@"Are you ready for some pizza?"
+                                                       delegate:self
+                                              cancelButtonTitle:@"No"
+                                              otherButtonTitles:@"Yes", nil];
+        alert.tag = 1;
+        [alert show];
+    }
+
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-    NSUserDefaults *orderInfo = [NSUserDefaults standardUserDefaults];
-    NSString *customerID = [orderInfo objectForKey:@"customerID"];
-    
-    
-    switch(buttonIndex) {
-        case 0: //"No" pressed
-            //do something?
-            break;
-        case 1: //"Yes" pressed
-            if ( (customerID == nil) || ([customerID isEqualToString:@""]) ) {
-                [self goToPaymentPage:nil];
-            } else {
+    if (alertView.tag == 1) {
+        switch(buttonIndex) {
+            case 0: //"No" pressed
+                //do something?
+                break;
+            case 1: //"Yes" pressed
                 [self getRestaurantIDs];
-            }
-            break;
+                break;
+        }
+    } else if (alertView.tag == 2) {
+        [self goToPaymentPage:nil];
     }
 }
 
@@ -349,7 +421,6 @@
     ||
     ||+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
 
-    NSMutableArray *toppingsFormattedForOrder = [NSMutableArray arrayWithObjects:@"green_peppers", @"mushrooms", @"pepperoni", @"sausage", @"black_olives", nil];
     
     NSMutableArray *toppingsArrayForOrder = [[orderInfo objectForKey:@"chosenToppings"] mutableCopy];
     NSMutableString *toppingsStringForOrder = [NSMutableString stringWithString:@""];
@@ -363,16 +434,16 @@
         for(int i = 0; i<[toppingsArrayForOrder count]; i++){
             if(![[toppingsArrayForOrder objectAtIndex:i] isEqualToString:@"none"]){
                 numToppings++;
-                lastTopping = [toppingsFormattedForOrder objectAtIndex:i];
+                lastTopping = [toppingsArrayForOrder objectAtIndex:i];
             }
         }
     }
     NSLog(@"Last Topping: %@", lastTopping);
     
     for(int i = 0; i<[toppingsArrayForOrder count]; i++){
-        if(![[toppingsArrayForOrder objectAtIndex:i] isEqualToString:@"none"] && ![[toppingsFormattedForOrder objectAtIndex:i] isEqualToString:lastTopping]){
-            [toppingsStringForOrder appendString:[NSString stringWithFormat:@"%@,",[toppingsFormattedForOrder objectAtIndex:i]]];
-            [formattedToppingsForSubmission addObject:[toppingsFormattedForOrder objectAtIndex:i]];
+        if(![[toppingsArrayForOrder objectAtIndex:i] isEqualToString:@"none"] && ![[toppingsArrayForOrder objectAtIndex:i] isEqualToString:lastTopping]){
+            [toppingsStringForOrder appendString:[NSString stringWithFormat:@"%@,",[toppingsArrayForOrder objectAtIndex:i]]];
+            [formattedToppingsForSubmission addObject:[toppingsArrayForOrder objectAtIndex:i]];
         }
     }
     if(lastTopping!=nil || lastTopping!=NULL){

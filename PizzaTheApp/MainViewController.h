@@ -17,6 +17,9 @@
     //NSMutableString *pizzaDescription;
 }
 
+@property (nonatomic,retain) UIButton *confirmButton;
+@property (nonatomic,retain) UILabel *priceLabel;
+
 //@property(nonatomic, retain) IBOutlet UIButton *clickMeButton;
 
 //-(IBAction)goToPizzaPage:(id)sender;

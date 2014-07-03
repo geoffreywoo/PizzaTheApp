@@ -65,8 +65,6 @@
 		60A6A9CC196224DE009D99AA /* emptyPlate@2X.png in Resources */ = {isa = PBXBuildFile; fileRef = 60A6A9BD196224DE009D99AA /* emptyPlate@2X.png */; };
 		60A6A9CD196224DE009D99AA /* header-logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 60A6A9BE196224DE009D99AA /* header-logo.png */; };
 		60A6A9CE196224DE009D99AA /* header-logo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 60A6A9BF196224DE009D99AA /* header-logo@2x.png */; };
-		60A6A9CF196224DE009D99AA /* Load Screen - 640x960.png in Resources */ = {isa = PBXBuildFile; fileRef = 60A6A9C0196224DE009D99AA /* Load Screen - 640x960.png */; };
-		60A6A9D0196224DE009D99AA /* Load Screen - 640x1136.png in Resources */ = {isa = PBXBuildFile; fileRef = 60A6A9C1196224DE009D99AA /* Load Screen - 640x1136.png */; };
 		60A6A9D1196224DE009D99AA /* map-pin.png in Resources */ = {isa = PBXBuildFile; fileRef = 60A6A9C2196224DE009D99AA /* map-pin.png */; };
 		60A6A9D2196224DE009D99AA /* map-pinPizza.png in Resources */ = {isa = PBXBuildFile; fileRef = 60A6A9C3196224DE009D99AA /* map-pinPizza.png */; };
 		60A6A9D3196224DE009D99AA /* pizzaCutter.png in Resources */ = {isa = PBXBuildFile; fileRef = 60A6A9C4196224DE009D99AA /* pizzaCutter.png */; };
@@ -84,6 +82,24 @@
 		60A6A9DF19622695009D99AA /* Verlag XLight Italic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 60A6A9B21960E332009D99AA /* Verlag XLight Italic.otf */; };
 		60A6A9E019622695009D99AA /* Verlag XLight.otf in Resources */ = {isa = PBXBuildFile; fileRef = 60A6A9B31960E332009D99AA /* Verlag XLight.otf */; };
 		60A6A9E119622695009D99AA /* Verlag-Book.otf in Resources */ = {isa = PBXBuildFile; fileRef = 60A6A9B41960E332009D99AA /* Verlag-Book.otf */; };
+		60A6A9ED19632D6A009D99AA /* mushroomsDrum.aif in Resources */ = {isa = PBXBuildFile; fileRef = 60A6A9E319632D6A009D99AA /* mushroomsDrum.aif */; };
+		60A6A9EE19632D6A009D99AA /* mushroomsGuitar.aif in Resources */ = {isa = PBXBuildFile; fileRef = 60A6A9E419632D6A009D99AA /* mushroomsGuitar.aif */; };
+		60A6A9EF19632D6A009D99AA /* olivesDrum.aif in Resources */ = {isa = PBXBuildFile; fileRef = 60A6A9E519632D6A009D99AA /* olivesDrum.aif */; };
+		60A6A9F019632D6A009D99AA /* olivesGuitar.aif in Resources */ = {isa = PBXBuildFile; fileRef = 60A6A9E619632D6A009D99AA /* olivesGuitar.aif */; };
+		60A6A9F119632D6A009D99AA /* pepperoniDrum.aif in Resources */ = {isa = PBXBuildFile; fileRef = 60A6A9E719632D6A009D99AA /* pepperoniDrum.aif */; };
+		60A6A9F219632D6A009D99AA /* pepperoniGuitar.aif in Resources */ = {isa = PBXBuildFile; fileRef = 60A6A9E819632D6A009D99AA /* pepperoniGuitar.aif */; };
+		60A6A9F319632D6A009D99AA /* peppersDrum.aif in Resources */ = {isa = PBXBuildFile; fileRef = 60A6A9E919632D6A009D99AA /* peppersDrum.aif */; };
+		60A6A9F419632D6A009D99AA /* peppersGuitar.aif in Resources */ = {isa = PBXBuildFile; fileRef = 60A6A9EA19632D6A009D99AA /* peppersGuitar.aif */; };
+		60A6A9F519632D6A009D99AA /* sausageDrum.aif in Resources */ = {isa = PBXBuildFile; fileRef = 60A6A9EB19632D6A009D99AA /* sausageDrum.aif */; };
+		60A6A9F619632D6A009D99AA /* sausageGuitar.aif in Resources */ = {isa = PBXBuildFile; fileRef = 60A6A9EC19632D6A009D99AA /* sausageGuitar.aif */; };
+		60A6A9FD19632F96009D99AA /* olives-bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 60A6A9F819632F96009D99AA /* olives-bg@2x.png */; };
+		60A6A9FE19632F96009D99AA /* peppers-bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 60A6A9F919632F96009D99AA /* peppers-bg@2x.png */; };
+		60A6A9FF19632F96009D99AA /* mushrooms-bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 60A6A9FA19632F96009D99AA /* mushrooms-bg@2x.png */; };
+		60A6AA0019632F96009D99AA /* pepperoni-bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 60A6A9FB19632F96009D99AA /* pepperoni-bg@2x.png */; };
+		60A6AA0119632F96009D99AA /* sausage-bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 60A6A9FC19632F96009D99AA /* sausage-bg@2x.png */; };
+		60A6AA0319638DC1009D99AA /* x.png in Resources */ = {isa = PBXBuildFile; fileRef = 60A6AA0219638DC1009D99AA /* x.png */; };
+		60A6AA061964B247009D99AA /* settings2-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 60A6AA041964B247009D99AA /* settings2-icon.png */; };
+		60A6AA071964B247009D99AA /* settings2-icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 60A6AA051964B247009D99AA /* settings2-icon@2x.png */; };
 		8F7398F8477B40E1A796B950 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A764387439F404E94B2916A /* libPods.a */; };
 /* End PBXBuildFile section */
 
@@ -186,14 +202,30 @@
 		60A6A9BD196224DE009D99AA /* emptyPlate@2X.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "emptyPlate@2X.png"; sourceTree = "<group>"; };
 		60A6A9BE196224DE009D99AA /* header-logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "header-logo.png"; sourceTree = "<group>"; };
 		60A6A9BF196224DE009D99AA /* header-logo@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "header-logo@2x.png"; sourceTree = "<group>"; };
-		60A6A9C0196224DE009D99AA /* Load Screen - 640x960.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Load Screen - 640x960.png"; sourceTree = "<group>"; };
-		60A6A9C1196224DE009D99AA /* Load Screen - 640x1136.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Load Screen - 640x1136.png"; sourceTree = "<group>"; };
 		60A6A9C2196224DE009D99AA /* map-pin.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "map-pin.png"; sourceTree = "<group>"; };
 		60A6A9C3196224DE009D99AA /* map-pinPizza.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "map-pinPizza.png"; sourceTree = "<group>"; };
 		60A6A9C4196224DE009D99AA /* pizzaCutter.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pizzaCutter.png; sourceTree = "<group>"; };
 		60A6A9C5196224DE009D99AA /* pizzaCutter@2X.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "pizzaCutter@2X.png"; sourceTree = "<group>"; };
 		60A6A9C6196224DE009D99AA /* plateFull.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = plateFull.png; sourceTree = "<group>"; };
 		60A6A9C7196224DE009D99AA /* plateFull@2X.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "plateFull@2X.png"; sourceTree = "<group>"; };
+		60A6A9E319632D6A009D99AA /* mushroomsDrum.aif */ = {isa = PBXFileReference; lastKnownFileType = file; path = mushroomsDrum.aif; sourceTree = "<group>"; };
+		60A6A9E419632D6A009D99AA /* mushroomsGuitar.aif */ = {isa = PBXFileReference; lastKnownFileType = file; path = mushroomsGuitar.aif; sourceTree = "<group>"; };
+		60A6A9E519632D6A009D99AA /* olivesDrum.aif */ = {isa = PBXFileReference; lastKnownFileType = file; path = olivesDrum.aif; sourceTree = "<group>"; };
+		60A6A9E619632D6A009D99AA /* olivesGuitar.aif */ = {isa = PBXFileReference; lastKnownFileType = file; path = olivesGuitar.aif; sourceTree = "<group>"; };
+		60A6A9E719632D6A009D99AA /* pepperoniDrum.aif */ = {isa = PBXFileReference; lastKnownFileType = file; path = pepperoniDrum.aif; sourceTree = "<group>"; };
+		60A6A9E819632D6A009D99AA /* pepperoniGuitar.aif */ = {isa = PBXFileReference; lastKnownFileType = file; path = pepperoniGuitar.aif; sourceTree = "<group>"; };
+		60A6A9E919632D6A009D99AA /* peppersDrum.aif */ = {isa = PBXFileReference; lastKnownFileType = file; path = peppersDrum.aif; sourceTree = "<group>"; };
+		60A6A9EA19632D6A009D99AA /* peppersGuitar.aif */ = {isa = PBXFileReference; lastKnownFileType = file; path = peppersGuitar.aif; sourceTree = "<group>"; };
+		60A6A9EB19632D6A009D99AA /* sausageDrum.aif */ = {isa = PBXFileReference; lastKnownFileType = file; path = sausageDrum.aif; sourceTree = "<group>"; };
+		60A6A9EC19632D6A009D99AA /* sausageGuitar.aif */ = {isa = PBXFileReference; lastKnownFileType = file; path = sausageGuitar.aif; sourceTree = "<group>"; };
+		60A6A9F819632F96009D99AA /* olives-bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "olives-bg@2x.png"; sourceTree = "<group>"; };
+		60A6A9F919632F96009D99AA /* peppers-bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "peppers-bg@2x.png"; sourceTree = "<group>"; };
+		60A6A9FA19632F96009D99AA /* mushrooms-bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "mushrooms-bg@2x.png"; sourceTree = "<group>"; };
+		60A6A9FB19632F96009D99AA /* pepperoni-bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "pepperoni-bg@2x.png"; sourceTree = "<group>"; };
+		60A6A9FC19632F96009D99AA /* sausage-bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "sausage-bg@2x.png"; sourceTree = "<group>"; };
+		60A6AA0219638DC1009D99AA /* x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = x.png; sourceTree = "<group>"; };
+		60A6AA041964B247009D99AA /* settings2-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "settings2-icon.png"; sourceTree = "<group>"; };
+		60A6AA051964B247009D99AA /* settings2-icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "settings2-icon@2x.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -260,12 +292,13 @@
 				607F55AC1960DE3A00926E1A /* PZAppDelegate.m */,
 				60A6A9321960DFA7009D99AA /* MainViewController.h */,
 				60A6A9331960DFA7009D99AA /* MainViewController.m */,
-				60A6A9351960DFEC009D99AA /* PaymentViewController.h */,
-				60A6A9361960DFEC009D99AA /* PaymentViewController.m */,
 				60A6A9381960E005009D99AA /* PizzaViewController.h */,
 				60A6A9391960E005009D99AA /* PizzaViewController.m */,
+				60A6A9351960DFEC009D99AA /* PaymentViewController.h */,
+				60A6A9361960DFEC009D99AA /* PaymentViewController.m */,
 				607F55AE1960DE3A00926E1A /* Main_iPhone.storyboard */,
 				607F55B11960DE3A00926E1A /* Main_iPad.storyboard */,
+				60A6A9E219632D6A009D99AA /* sounds */,
 				60A6A9B619613DF8009D99AA /* MJViews */,
 				60A6A9B719613E02009D99AA /* SPGooglePlaces */,
 				60A6A9B819613E0D009D99AA /* Fonts */,
@@ -318,15 +351,17 @@
 		60A6A9B519613519009D99AA /* Images */ = {
 			isa = PBXGroup;
 			children = (
-				60A6A9B9196224DE009D99AA /* 58x58.png */,
-				60A6A9BA196224DE009D99AA /* 80x80.png */,
-				60A6A9BB196224DE009D99AA /* 120x120.png */,
+				60A6AA0219638DC1009D99AA /* x.png */,
+				60A6A9F719632F5D009D99AA /* Icons */,
+				60A6A9F819632F96009D99AA /* olives-bg@2x.png */,
+				60A6A9F919632F96009D99AA /* peppers-bg@2x.png */,
+				60A6A9FA19632F96009D99AA /* mushrooms-bg@2x.png */,
+				60A6A9FB19632F96009D99AA /* pepperoni-bg@2x.png */,
+				60A6A9FC19632F96009D99AA /* sausage-bg@2x.png */,
 				60A6A9BC196224DE009D99AA /* emptyPlate.png */,
 				60A6A9BD196224DE009D99AA /* emptyPlate@2X.png */,
 				60A6A9BE196224DE009D99AA /* header-logo.png */,
 				60A6A9BF196224DE009D99AA /* header-logo@2x.png */,
-				60A6A9C0196224DE009D99AA /* Load Screen - 640x960.png */,
-				60A6A9C1196224DE009D99AA /* Load Screen - 640x1136.png */,
 				60A6A9C2196224DE009D99AA /* map-pin.png */,
 				60A6A9C3196224DE009D99AA /* map-pinPizza.png */,
 				60A6A9C4196224DE009D99AA /* pizzaCutter.png */,
@@ -347,9 +382,6 @@
 				60A6A97C1960E2FF009D99AA /* cancelButton.jpg */,
 				60A6A97D1960E2FF009D99AA /* checkComplete.jpg */,
 				60A6A97E1960E2FF009D99AA /* chevron - forward@2x.png */,
-				60A6A9821960E308009D99AA /* LaunchImage-568h@2x.png */,
-				60A6A9831960E308009D99AA /* LaunchImage.png */,
-				60A6A9841960E308009D99AA /* LaunchImage@2x.png */,
 				60A6A9851960E308009D99AA /* locateButton.png */,
 				60A6A9861960E308009D99AA /* locateButton@2x.png */,
 				60A6A9871960E308009D99AA /* location.png */,
@@ -411,6 +443,38 @@
 			name = Fonts;
 			sourceTree = "<group>";
 		};
+		60A6A9E219632D6A009D99AA /* sounds */ = {
+			isa = PBXGroup;
+			children = (
+				60A6A9E319632D6A009D99AA /* mushroomsDrum.aif */,
+				60A6A9E419632D6A009D99AA /* mushroomsGuitar.aif */,
+				60A6A9E519632D6A009D99AA /* olivesDrum.aif */,
+				60A6A9E619632D6A009D99AA /* olivesGuitar.aif */,
+				60A6A9E719632D6A009D99AA /* pepperoniDrum.aif */,
+				60A6A9E819632D6A009D99AA /* pepperoniGuitar.aif */,
+				60A6A9E919632D6A009D99AA /* peppersDrum.aif */,
+				60A6A9EA19632D6A009D99AA /* peppersGuitar.aif */,
+				60A6A9EB19632D6A009D99AA /* sausageDrum.aif */,
+				60A6A9EC19632D6A009D99AA /* sausageGuitar.aif */,
+			);
+			path = sounds;
+			sourceTree = "<group>";
+		};
+		60A6A9F719632F5D009D99AA /* Icons */ = {
+			isa = PBXGroup;
+			children = (
+				60A6AA041964B247009D99AA /* settings2-icon.png */,
+				60A6AA051964B247009D99AA /* settings2-icon@2x.png */,
+				60A6A9821960E308009D99AA /* LaunchImage-568h@2x.png */,
+				60A6A9831960E308009D99AA /* LaunchImage.png */,
+				60A6A9841960E308009D99AA /* LaunchImage@2x.png */,
+				60A6A9B9196224DE009D99AA /* 58x58.png */,
+				60A6A9BA196224DE009D99AA /* 80x80.png */,
+				60A6A9BB196224DE009D99AA /* 120x120.png */,
+			);
+			name = Icons;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -461,6 +525,9 @@
 				LastUpgradeCheck = 0510;
 				ORGANIZATIONNAME = Pizza;
 				TargetAttributes = {
+					607F55981960DE3900926E1A = {
+						DevelopmentTeam = V827M9237E;
+					};
 					607F55BC1960DE3A00926E1A = {
 						TestTargetID = 607F55981960DE3900926E1A;
 					};
@@ -494,26 +561,34 @@
 				60A6A9D819622695009D99AA /* Verlag Black.otf in Resources */,
 				60A6A9D919622695009D99AA /* Verlag Bold Italic.otf in Resources */,
 				60A6A9DA19622695009D99AA /* Verlag Bold.otf in Resources */,
+				60A6A9F319632D6A009D99AA /* peppersDrum.aif in Resources */,
+				60A6A9FE19632F96009D99AA /* peppers-bg@2x.png in Resources */,
 				60A6A9DB19622695009D99AA /* Verlag Book Italic.otf in Resources */,
+				60A6A9F419632D6A009D99AA /* peppersGuitar.aif in Resources */,
 				60A6A9DC19622695009D99AA /* Verlag Book.otf in Resources */,
 				60A6A9DD19622695009D99AA /* Verlag Light Italic.otf in Resources */,
 				60A6A9DE19622695009D99AA /* Verlag Light.otf in Resources */,
 				60A6A9DF19622695009D99AA /* Verlag XLight Italic.otf in Resources */,
+				60A6AA061964B247009D99AA /* settings2-icon.png in Resources */,
 				60A6A9E019622695009D99AA /* Verlag XLight.otf in Resources */,
+				60A6AA071964B247009D99AA /* settings2-icon@2x.png in Resources */,
+				60A6AA0119632F96009D99AA /* sausage-bg@2x.png in Resources */,
 				60A6A9E119622695009D99AA /* Verlag-Book.otf in Resources */,
 				60A6A9CD196224DE009D99AA /* header-logo.png in Resources */,
 				60A6A9A11960E31F009D99AA /* pepperoni.png in Resources */,
 				60A6A9D1196224DE009D99AA /* map-pin.png in Resources */,
+				60A6A9ED19632D6A009D99AA /* mushroomsDrum.aif in Resources */,
 				60A6A9811960E2FF009D99AA /* chevron - forward@2x.png in Resources */,
 				607F55B31960DE3A00926E1A /* Main_iPad.storyboard in Resources */,
 				607F55B81960DE3A00926E1A /* Images.xcassets in Resources */,
 				60A6A98F1960E308009D99AA /* location@2x.png in Resources */,
 				60A6A9C9196224DE009D99AA /* 80x80.png in Resources */,
 				60A6A9991960E314009D99AA /* navbar@2x.png in Resources */,
+				60A6A9FD19632F96009D99AA /* olives-bg@2x.png in Resources */,
 				60A6A94C1960E03A009D99AA /* SPGooglePlacesAutocompleteDemoViewController.xib in Resources */,
 				60A6A98E1960E308009D99AA /* location.png in Resources */,
 				60A6A9CE196224DE009D99AA /* header-logo@2x.png in Resources */,
-				60A6A9D0196224DE009D99AA /* Load Screen - 640x1136.png in Resources */,
+				60A6A9EE19632D6A009D99AA /* mushroomsGuitar.aif in Resources */,
 				60A6A9CC196224DE009D99AA /* emptyPlate@2X.png in Resources */,
 				60A6A9D6196224DE009D99AA /* plateFull@2X.png in Resources */,
 				60A6A98B1960E308009D99AA /* LaunchImage@2x.png in Resources */,
@@ -523,26 +598,34 @@
 				60A6A97F1960E2FF009D99AA /* cancelButton.jpg in Resources */,
 				607F55B01960DE3A00926E1A /* Main_iPhone.storyboard in Resources */,
 				60A6A9D2196224DE009D99AA /* map-pinPizza.png in Resources */,
+				60A6A9F519632D6A009D99AA /* sausageDrum.aif in Resources */,
 				60A6A9971960E314009D99AA /* mushroomsnew.png in Resources */,
+				60A6A9F119632D6A009D99AA /* pepperoniDrum.aif in Resources */,
 				60A6A99B1960E314009D99AA /* olivesnew.png in Resources */,
 				60A6A98D1960E308009D99AA /* locateButton@2x.png in Resources */,
-				60A6A9CF196224DE009D99AA /* Load Screen - 640x960.png in Resources */,
 				60A6A98C1960E308009D99AA /* locateButton.png in Resources */,
+				60A6A9EF19632D6A009D99AA /* olivesDrum.aif in Resources */,
 				60A6A9741960E087009D99AA /* MJDetailViewController.xib in Resources */,
 				60A6A9D5196224DE009D99AA /* plateFull.png in Resources */,
 				60A6A99A1960E314009D99AA /* olives.png in Resources */,
+				60A6A9F219632D6A009D99AA /* pepperoniGuitar.aif in Resources */,
 				60A6A9A91960E328009D99AA /* sausagenew.png in Resources */,
 				60A6A9A51960E31F009D99AA /* pizza.png in Resources */,
 				60A6A9891960E308009D99AA /* LaunchImage-568h@2x.png in Resources */,
 				60A6A9C8196224DE009D99AA /* 58x58.png in Resources */,
+				60A6AA0019632F96009D99AA /* pepperoni-bg@2x.png in Resources */,
 				60A6A9981960E314009D99AA /* navbar.png in Resources */,
+				60A6A9F019632D6A009D99AA /* olivesGuitar.aif in Resources */,
+				60A6AA0319638DC1009D99AA /* x.png in Resources */,
 				60A6A9D3196224DE009D99AA /* pizzaCutter.png in Resources */,
+				60A6A9F619632D6A009D99AA /* sausageGuitar.aif in Resources */,
 				607F55A71960DE3A00926E1A /* InfoPlist.strings in Resources */,
 				60A6A98A1960E308009D99AA /* LaunchImage.png in Resources */,
 				60A6A9A81960E328009D99AA /* sausage.png in Resources */,
 				60A6A9CA196224DE009D99AA /* 120x120.png in Resources */,
 				60A6A9961960E314009D99AA /* mushrooms.png in Resources */,
 				60A6A9CB196224DE009D99AA /* emptyPlate.png in Resources */,
+				60A6A9FF19632F96009D99AA /* mushrooms-bg@2x.png in Resources */,
 				60A6A9A41960E31F009D99AA /* peppersnew.png in Resources */,
 				60A6A9801960E2FF009D99AA /* checkComplete.jpg in Resources */,
 			);
@@ -745,10 +828,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "PizzaTheApp/PizzaTheApp-Prefix.pch";
 				INFOPLIST_FILE = "PizzaTheApp/PizzaTheApp-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
+				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -759,10 +846,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "PizzaTheApp/PizzaTheApp-Prefix.pch";
 				INFOPLIST_FILE = "PizzaTheApp/PizzaTheApp-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
+				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

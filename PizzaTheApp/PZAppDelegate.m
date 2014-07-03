@@ -36,14 +36,13 @@
     
     //[GMSServices provideAPIKey:@"AIzaSyBvQ1lVl5sRj9hXhuYov8aRJQoiHspBXug"];
     
-    [[UINavigationBar appearance] setBarTintColor:[UIColor whiteColor]];
+    //[[UINavigationBar appearance] setBarTintColor:pizzaRedColor];
     return YES;
     
     /*[Mixpanel sharedInstanceWithToken:MIXPANEL_TOKEN];
      Mixpanel *mixpanel = [Mixpanel sharedInstance];
      [mixpanel identify:mixpanel.distinctId];*/
-    
-    self.window.tintColor = pizzaRedColor;
+
     
     //  [[Crashlytics sharedInstance] setDebugMode:YES];
     //  [Crashlytics startWithAPIKey:@"ebbc14193e927d89660135179e36b30df3e5311a"];

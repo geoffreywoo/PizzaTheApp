@@ -34,7 +34,7 @@
 
 - (void)viewDidLoad {
     screenRect = [[UIScreen mainScreen] bounds];
-    self.searchDisplayController.searchBar.placeholder = @"Search or Address";
+    self.searchDisplayController.searchBar.placeholder = @"Where do you want your pizza?";
     self.edgesForExtendedLayout = UIRectEdgeLeft | UIRectEdgeBottom | UIRectEdgeRight;
     
    // Mixpanel *mixpanel = [Mixpanel sharedInstance];
@@ -62,42 +62,52 @@
         UIBarButtonItem *saveButton = [[UIBarButtonItem alloc] initWithTitle:@"Next" style:UIBarButtonItemStyleDone target:self action:@selector(next:)];
         self.navigationItem.rightBarButtonItem = saveButton;
     }
-    
-    
-    
+    /*
     UIImageView *mapPin = [[UIImageView alloc] initWithImage:[UIImage imageNamed:[NSString stringWithFormat:@"map-pinPizza.png"]]];
     mapPin.frame = CGRectMake(screenRect.size.width/2-40, screenRect.size.height/2-80, 80, 80);
     [self.view addSubview:mapPin];
-    
+     */
+}
+
+- (void) viewWillAppear:(BOOL)animated
+{
+    /*
     self.locationManager = [[CLLocationManager alloc] init];
     self.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
     self.locationManager.delegate = self;
     [self.locationManager startUpdatingLocation];
-    
+     */
+    self.mapView.showsUserLocation=NO;
+    self.mapView.userInteractionEnabled=NO;
+}
+
+- (void) viewWillDisappear:(BOOL)animated
+{
+    //[self.locationManager stopUpdatingLocation];
 }
 
 - (void)viewDidUnload {
     [self setMapView:nil];
-    [self.locationManager stopUpdatingLocation];
     [super viewDidUnload];
     
 }
 
-- (void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation
+- (void)mapView:(MKMapView *)mView didUpdateUserLocation:(MKUserLocation *)userLocation
 {
-    if ( !_initialLocation )
+    NSLog(@"userLocation: %@", userLocation);
+    if ( !self.initialLocation )
     {
         self.initialLocation = userLocation.location;
         
         MKCoordinateRegion region;
-        region.center = mapView.userLocation.coordinate;
-        region.span = MKCoordinateSpanMake(0.03, 0.03);
+        region.center = mView.userLocation.coordinate;
+        region.span = MKCoordinateSpanMake(0.01, 0.01);
         
-        region = [mapView regionThatFits:region];
-        [mapView setRegion:region animated:YES];
+        region = [mView regionThatFits:region];
+        [mView setRegion:region animated:YES];
     }
     
-    [self performCoordinateGeocode:self];
+    //[self performCoordinateGeocode:self];
     
 }
 
@@ -113,9 +123,14 @@
                                               otherButtonTitles:@"Yes", nil];
         [alert show];
     } else {
+
         [self.locationManager stopUpdatingLocation];
-        UIViewController *sec=[[PaymentViewController alloc] initWithNibName:@"PaymentViewController" bundle:nil];
-        [self.navigationController pushViewController:sec animated:YES];
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"HasLaunchedOnce"];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+        [[self navigationController] popToRootViewControllerAnimated:YES];
+//        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main_iPhone" bundle:nil];
+ //       PaymentViewController *sec= [storyboard instantiateViewControllerWithIdentifier:@"PaymentViewController"];
+  //      [self.navigationController pushViewController:sec animated:YES];
     }
 }
 
@@ -207,8 +222,8 @@
     MKCoordinateRegion region;
     MKCoordinateSpan span;
     
-    span.latitudeDelta = 0.015;
-    span.longitudeDelta = 0.015;
+    span.latitudeDelta = 0.005;
+    span.longitudeDelta = 0.005;
     
     region.span = span;
     region.center = placemark.location.coordinate;
@@ -219,6 +234,7 @@
     [zipStore setObject:[NSString stringWithFormat:@"%@", placemark.postalCode] forKey:@"zipCode"];
     [zipStore synchronize];
 }
+
 
 - (void)addPlacemarkAnnotationToMap:(CLPlacemark *)placemark addressString:(NSString *)address {
     [self.mapView removeAnnotation:selectedPlaceAnnotation];
@@ -359,6 +375,25 @@
 #pragma mark MKMapView Delegate
 
 - (MKAnnotationView *)mapView:(MKMapView *)mapViewIn viewForAnnotation:(id <MKAnnotation>)annotation {
+    if ([annotation isKindOfClass:[MKUserLocation class]])
+        return nil;
+    static NSString* AnnotationIdentifier = @"AnnotationIdentifier";
+    MKAnnotationView *annotationView = [mapView dequeueReusableAnnotationViewWithIdentifier:AnnotationIdentifier];
+    if(annotationView)
+        return annotationView;
+    else
+    {
+        MKAnnotationView *annotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation
+                                                                         reuseIdentifier:AnnotationIdentifier];
+        annotationView.canShowCallout = YES;
+        annotationView.image = [UIImage imageNamed:@"map-pin.png"];
+        annotationView.frame = CGRectMake(0,0,60,60);
+        annotationView.canShowCallout = YES;
+        annotationView.draggable = NO;
+        return annotationView;
+    }
+    return nil;
+    /*
     if (mapViewIn != self.mapView || [annotation isKindOfClass:[MKUserLocation class]]) {
         return nil;
     }
@@ -369,12 +404,17 @@
     }
     annotationView.animatesDrop = YES;
     annotationView.canShowCallout = YES;
+    UIImage *flagImage = [UIImage imageNamed:@"map-pinPizza.png"];
+    // You may need to resize the image here.
+    annotationView.image = flagImage;
+    return annotationView;
     
     UIButton *detailButton = [UIButton buttonWithType:UIButtonTypeDetailDisclosure];
     [detailButton addTarget:self action:@selector(annotationDetailButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
     annotationView.rightCalloutAccessoryView = detailButton;
     
     return annotationView;
+     */
 }
 
 - (void)mapView:(MKMapView *)mapView didAddAnnotationViews:(NSArray *)views {
@@ -397,8 +437,7 @@
                                               otherButtonTitles:@"Yes", nil];
         [alert show];
     } else {
-        UIViewController *sec=[[MainViewController alloc] initWithNibName:@"MainViewController" bundle:nil];
-        [self.navigationController pushViewController:sec animated:YES];
+        [self.navigationController popToRootViewControllerAnimated:YES];
     }
     
 }
@@ -413,17 +452,8 @@
                                               otherButtonTitles:@"Yes", nil];
         [alert show];
     } else {
-        UIViewController *sec=[[MainViewController alloc] initWithNibName:@"MainViewController" bundle:nil];
-        [self.navigationController pushViewController:sec animated:YES];
+        [self.navigationController popToRootViewControllerAnimated:YES];
     }
-}
-
-- (void)viewWillDisappear:(BOOL)animated{
-    if (self.locationManager){
-        mapView.showsUserLocation = NO;
-        [self.locationManager stopUpdatingLocation];
-    }
-    [super viewWillDisappear:animated];
 }
 
 - (void)dealloc{
