@@ -17,21 +17,23 @@
 #import "AFNetworking.h"
 
 //#import <Crashlytics/Crashlytics.h>
-/*
+
 #define STRIPE_KEY @"pk_test_9wPOvSKQ8o5EsuXDWUIBjzlQ"
 #define API_CONFIG @"https://pizzatheapp-staging.herokuapp.com/api/config"
 #define API_ORDERS @"https://pizzatheapp-staging.herokuapp.com/api/orders"
 #define API_CUSTOMERS @"https://pizzatheapp-staging.herokuapp.com/api/customers/"
+#define API_CHECK_PRICES_ZIP @"https://pizzatheapp-staging.herokuapp.com/api/zipCodePrice/"
 #define BASE_URL_RESTAURANTS @"https://pizzatheapp-staging.herokuapp.com/api/closest-restaurants?"
-*/
 
+
+/*
 #define STRIPE_KEY @"pk_live_5l59z07mDTFiUSSxp9UGBYxr"
 #define API_CONFIG @"https://pizzatheapp.herokuapp.com/api/config"
 #define API_ORDERS @"https://pizzatheapp.herokuapp.com/api/orders"
 #define API_CUSTOMERS @"https://pizzatheapp.herokuapp.com/api/customers/"
-#define API_CHECK_PRICES_ZIP @"https://pizzatheapp.herokuapp.com/api/basePrice/"
+#define API_CHECK_PRICES_ZIP @"https://pizzatheapp.herokuapp.com/api/zipCodePrice/"
 #define BASE_URL_RESTAURANTS @"https://pizzatheapp.herokuapp.com/api/closest-restaurants?"
-
+*/
 #define RGB(r,g,b) [UIColor colorWithRed:r/255.0f green:g/255.0f blue:b/255.0f alpha:1.0f]
 #define pizzaRedColor RGB(195,36,43)
 #define backgroundGrey RGB(248,248,248)
@@ -52,7 +54,7 @@
 @implementation MainViewController
 
 - (void) displayPrice {
-    int price = [[NSUserDefaults standardUserDefaults] integerForKey:@"basePrice"]+[[NSUserDefaults standardUserDefaults] integerForKey:@"tipPrice"];
+    int price = [[NSUserDefaults standardUserDefaults] integerForKey:@"basePrice"]+[[NSUserDefaults standardUserDefaults] integerForKey:@"tipPrice"]+[[NSUserDefaults standardUserDefaults] integerForKey:@"taxAndDeliveryPrice"];
     for(int i = 0; i < [chosenToppings count]; i++){
         if([[chosenToppings objectAtIndex:i] isEqualToString:@"none"]){
             // Do nothing
@@ -73,6 +75,7 @@
         
         int toppingPrice = [[responseObject objectForKey:@"TOPPING_PRICE_CENTS"] intValue]/100;
         int tipPrice = [[responseObject objectForKey:@"TIP_CENTS"] intValue]/100;
+        int taxAndDeliveryPrice = [[responseObject objectForKey:@"TAX_AND_DELIVERY_CENTS"] intValue]/100;
         int basePrice = [[responseObject objectForKey:@"BASE_PRICE_CENTS"] intValue]/100;
         NSLog(@"Topping Price %d", toppingPrice);
         NSLog(@"tip Price %d", tipPrice);
@@ -81,6 +84,7 @@
         NSUserDefaults *pricingStore = [NSUserDefaults standardUserDefaults];
         [pricingStore setInteger:toppingPrice forKey:@"toppingPrice"];
         [pricingStore setInteger:tipPrice forKey:@"tipPrice"];
+        [pricingStore setInteger:taxAndDeliveryPrice forKey:@"taxAndDeliveryPrice"];
         [pricingStore setInteger:basePrice forKey:@"basePrice"];
         [pricingStore synchronize];
         
@@ -93,28 +97,34 @@
 }
 
 - (void) initPrices {
-    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    NSString *stringForPrices = API_CONFIG;
-    [manager GET:[NSString stringWithFormat:@"%@",stringForPrices] parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        NSLog(@"JSON: %@", responseObject);
+    if ([[NSUserDefaults standardUserDefaults] objectForKey:@"zipCode"]) {
+        [self checkPrices];
+    } else {
+        AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+        NSString *stringForPrices = API_CONFIG;
+        [manager GET:[NSString stringWithFormat:@"%@",stringForPrices] parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+            NSLog(@"JSON: %@", responseObject);
         
-        int toppingPrice = [[responseObject objectForKey:@"TOPPING_PRICE_CENTS"] intValue]/100;
-        int tipPrice = [[responseObject objectForKey:@"TIP_CENTS"] intValue]/100;
-        int basePrice = [[responseObject objectForKey:@"BASE_PRICE_CENTS"] intValue]/100;
-        NSLog(@"Topping Price %d", toppingPrice);
-        NSLog(@"tip Price %d", tipPrice);
-        NSLog(@"Base Price %d", basePrice);
+            int toppingPrice = [[responseObject objectForKey:@"TOPPING_PRICE_CENTS"] intValue]/100;
+            int tipPrice = [[responseObject objectForKey:@"TIP_CENTS"] intValue]/100;
+            int taxAndDeliveryPrice = [[responseObject objectForKey:@"TAX_AND_DELIVERY_CENTS"] intValue]/100;
+            int basePrice = [[responseObject objectForKey:@"BASE_PRICE_CENTS"] intValue]/100;
+            NSLog(@"Topping Price %d", toppingPrice);
+            NSLog(@"tip Price %d", tipPrice);
+            NSLog(@"Base Price %d", basePrice);
         
-        NSUserDefaults *pricingStore = [NSUserDefaults standardUserDefaults];
-        [pricingStore setInteger:toppingPrice forKey:@"toppingPrice"];
-        [pricingStore setInteger:tipPrice forKey:@"tipPrice"];
-        [pricingStore setInteger:basePrice forKey:@"basePrice"];
-        [pricingStore synchronize];
+            NSUserDefaults *pricingStore = [NSUserDefaults standardUserDefaults];
+            [pricingStore setInteger:toppingPrice forKey:@"toppingPrice"];
+            [pricingStore setInteger:tipPrice forKey:@"tipPrice"];
+            [pricingStore setInteger:taxAndDeliveryPrice forKey:@"taxAndDeliveryPrice"];
+            [pricingStore setInteger:basePrice forKey:@"basePrice"];
+            [pricingStore synchronize];
         
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        [MBProgressHUD hideHUDForView:self.view animated:YES];
-        NSLog(@"Error: %@", error.description);
-    }];
+        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+            [MBProgressHUD hideHUDForView:self.view animated:YES];
+            NSLog(@"Error: %@", error.description);
+        }];
+    }
     
 }
 
@@ -303,9 +313,6 @@
     self.navigationItem.titleView = [[UIImageView alloc] initWithImage:titleImage];
     
     [self.view setBackgroundColor:backgroundGrey];
- 
-    [self initPrices];
-    [self fetchCustomerData];
 
     if ([[NSUserDefaults standardUserDefaults] boolForKey:@"HasLaunchedOnce"]){
         [self.navigationItem setHidesBackButton:YES];
@@ -327,8 +334,11 @@
     [self checkPrices];
 }
 
-
-
+- (void) viewDidLoad {
+    [super viewDidLoad];
+    [self initPrices];
+    [self fetchCustomerData];
+}
 
 - (void)didReceiveMemoryWarning
 
@@ -547,7 +557,7 @@
             NSLog(@"Customer ID: %@", [orderInfo objectForKey:@"customerID"]);
             NSLog(@"Response: %@", responseObject);
             
-            if ([[responseObject objectForKey:@"error"] rangeOfString:@"Failed to order from any of"].location == NSNotFound || [responseObject objectForKey:@"error"]==nil) {
+            if ([responseObject objectForKey:@"error"]==nil) {
                 MJDetailViewController *detailViewController = [[MJDetailViewController alloc] initWithNibName:@"MJDetailViewController" bundle:nil];
                 [self presentPopupViewController:detailViewController animationType:MJPopupViewAnimationSlideBottomBottom];
                 

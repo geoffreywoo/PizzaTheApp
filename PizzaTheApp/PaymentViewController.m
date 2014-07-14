@@ -12,16 +12,15 @@
 #import "MainViewController.h"
 #import "PKView.h"
 
-/*
 #define STRIPE_KEY @"pk_test_9wPOvSKQ8o5EsuXDWUIBjzlQ"
 #define API_ORDERS @"https://pizzatheapp-staging.herokuapp.com/api/orders"
 #define API_CUSTOMERS @"https://pizzatheapp-staging.herokuapp.com/api/customers/"
-*/
 
+/*
 #define STRIPE_KEY @"pk_live_5l59z07mDTFiUSSxp9UGBYxr"
 #define API_ORDERS @"https://pizzatheapp.herokuapp.com/api/orders"
 #define API_CUSTOMERS @"https://pizzatheapp.herokuapp.com/api/customers/"
-
+*/
 #define DefaultBoldFont [UIFont boldSystemFontOfSize:17]
 #define RGB(r,g,b) [UIColor colorWithRed:r/255.0f green:g/255.0f blue:b/255.0f alpha:1.0f]
 #define DarkGreyColor RGB(247,247,247)
@@ -110,7 +109,7 @@ bool _cardValid;
 
 - (IBAction)cancelPhone:(id)sender {
     if (!_phonePopulated) return;
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"You sure about that mate?"
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"You sure about that?"
                                                     message:@"Do you really want to delete your phone number?"
                                                    delegate:self
                                           cancelButtonTitle:@"No"
@@ -121,7 +120,7 @@ bool _cardValid;
 
 - (IBAction)cancelCard:(id)sender {
     if (!_cardPopulated) return;
-    UIAlertView *alertCard = [[UIAlertView alloc] initWithTitle:@"You sure about that mate?"
+    UIAlertView *alertCard = [[UIAlertView alloc] initWithTitle:@"You sure about that?"
                                                         message:@"Do you really want to delete your card information?"
                                                        delegate:self
                                               cancelButtonTitle:@"No"
@@ -132,7 +131,7 @@ bool _cardValid;
 
 
 - (IBAction)cancelAll:(id)sender {
-    UIAlertView *alertCard = [[UIAlertView alloc] initWithTitle:@"You sure about that mate?"
+    UIAlertView *alertCard = [[UIAlertView alloc] initWithTitle:@"You sure about that?"
                                                         message:@"Do you really want to delete all your information?"
                                                        delegate:self
                                               cancelButtonTitle:@"No"
