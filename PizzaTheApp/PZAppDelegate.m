@@ -10,11 +10,17 @@
 //#import "SCViewController.h"
 #import "MainViewController.h"
 #import "PaymentViewController.h"
+#import "Mixpanel/Mixpanel.h"
 //#import <Crashlytics/Crashlytics.h>
 
 
 //#import <GoogleMaps/GoogleMaps.h>
-#define MIXPANEL_TOKEN @"6a6b858b3aa18c72c8bf1f8afecd1bd6"
+
+//DEV
+//#define MIXPANEL_TOKEN @"7ffd3d234a64a8a9090bad210ca45ffe"
+
+//PROD
+#define MIXPANEL_TOKEN @"b8819bb36b67775692aacd6b2845a6a7"
 #define RGB(r,g,b) [UIColor colorWithRed:r/255.0f green:g/255.0f blue:b/255.0f alpha:1.0f]
 #define pizzaRedColor RGB(195,36,43)
 
@@ -24,28 +30,34 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    
-    /*
-    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    self.window.backgroundColor = [UIColor whiteColor];
-    UIViewController *cont=[[MainViewController alloc]initWithNibName:@"MainViewController" bundle:nil];
-    self.navController=[[UINavigationController alloc]initWithRootViewController:cont];
-    [self.window setRootViewController:navController];
-    [self.window makeKeyAndVisible];
-    */
-    
-    //[GMSServices provideAPIKey:@"AIzaSyBvQ1lVl5sRj9hXhuYov8aRJQoiHspBXug"];
-    
-    //[[UINavigationBar appearance] setBarTintColor:pizzaRedColor];
-    return YES;
-    
-    /*[Mixpanel sharedInstanceWithToken:MIXPANEL_TOKEN];
-     Mixpanel *mixpanel = [Mixpanel sharedInstance];
-     [mixpanel identify:mixpanel.distinctId];*/
+    [Mixpanel sharedInstanceWithToken:MIXPANEL_TOKEN];
+    Mixpanel *mixpanel = [Mixpanel sharedInstance];
+    [mixpanel identify:mixpanel.distinctId];
 
     
-    //  [[Crashlytics sharedInstance] setDebugMode:YES];
-    //  [Crashlytics startWithAPIKey:@"ebbc14193e927d89660135179e36b30df3e5311a"];
+    [application registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
+    
+    return YES;
+}
+
+- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
+{
+    NSLog(@"didRegisterForRemoteNotification");
+    Mixpanel *mixpanel = [Mixpanel sharedInstance];
+    [mixpanel.people addPushDeviceToken:deviceToken];
+}
+
+- (void)application:(UIApplication *)application
+didReceiveRemoteNotification:(NSDictionary *)userInfo {
+    NSString *message = [[userInfo objectForKey:@"aps"]
+                         objectForKey:@"alert"];
+    UIAlertView *alert = [[UIAlertView alloc]
+                          initWithTitle:@""
+                          message:message
+                          delegate:nil
+                          cancelButtonTitle:@"OK"
+                          otherButtonTitles:nil];
+    [alert show];
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application

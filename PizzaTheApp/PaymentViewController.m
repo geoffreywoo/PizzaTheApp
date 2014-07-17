@@ -11,16 +11,18 @@
 #import "AFNetworking.h"
 #import "MainViewController.h"
 #import "PKView.h"
+#import "Mixpanel/Mixpanel.h"
 
+/*
 #define STRIPE_KEY @"pk_test_9wPOvSKQ8o5EsuXDWUIBjzlQ"
 #define API_ORDERS @"https://pizzatheapp-staging.herokuapp.com/api/orders"
 #define API_CUSTOMERS @"https://pizzatheapp-staging.herokuapp.com/api/customers/"
+*/
 
-/*
 #define STRIPE_KEY @"pk_live_5l59z07mDTFiUSSxp9UGBYxr"
 #define API_ORDERS @"https://pizzatheapp.herokuapp.com/api/orders"
 #define API_CUSTOMERS @"https://pizzatheapp.herokuapp.com/api/customers/"
-*/
+ 
 #define DefaultBoldFont [UIFont boldSystemFontOfSize:17]
 #define RGB(r,g,b) [UIColor colorWithRed:r/255.0f green:g/255.0f blue:b/255.0f alpha:1.0f]
 #define DarkGreyColor RGB(247,247,247)
@@ -208,6 +210,7 @@ bool _cardValid;
                 }
                 self.nameCheck.hidden = YES;
                 self.nameField.placeholder = @"Joey Pepperoni";
+                self.nameField.enabled = YES;
                 
                 self.clearButton.enabled = NO;
                 self.clearButton.hidden = YES;
@@ -247,6 +250,7 @@ bool _cardValid;
     if([[NSUserDefaults standardUserDefaults] objectForKey:@"customerPhone"]!=NULL){
         NSLog(@"placing: '%@'",[[NSUserDefaults standardUserDefaults] objectForKey:@"customerPhone"]);
         self.phoneNumberField.placeholder = [NSString stringWithFormat:@"%@",[[NSUserDefaults standardUserDefaults] objectForKey:@"customerPhone"]];
+        self.phoneNumberField.enabled = NO;
     } else {
         self.phoneNumberField.placeholder = @"Phone Number";
     }
@@ -275,6 +279,7 @@ bool _cardValid;
     if([[NSUserDefaults standardUserDefaults] objectForKey:@"first_name"]!=NULL){
         self.nameField.placeholder = [NSString stringWithFormat:@"%@ %@",[[NSUserDefaults standardUserDefaults] objectForKey:@"first_name"],[[NSUserDefaults standardUserDefaults] objectForKey:@"last_name"]];
         _namePopulated = YES;
+        self.nameField.enabled = NO;
     } else {
         self.nameField.placeholder = @"Joey Pepperoni";
         self.nameCheck.hidden = YES;
@@ -362,6 +367,9 @@ bool _cardValid;
     [super viewWillAppear:animated];
     self.saveButton.enabled = NO;
     
+    Mixpanel *mixpanel = [Mixpanel sharedInstance];
+    [mixpanel track:@"paymentViewController"];
+    
     // IF CUSTOMER ID IS SAVED, CHANGE THE DISPLAY
     if([[NSUserDefaults standardUserDefaults] objectForKey:@"customerID"]!=nil){
         [self removeStripeView];
@@ -443,6 +451,15 @@ bool _cardValid;
         
         NSLog(@"first_name: %@", first_name);
         NSLog(@"last_name: %@", last_name);
+        
+        Mixpanel *mixpanel = [Mixpanel sharedInstance];
+        [mixpanel createAlias:[NSString stringWithFormat:@"%@ %@", first_name, last_name]
+                forDistinctID:mixpanel.distinctId];
+        [mixpanel.people set:@{
+            @"first_name" : first_name,
+            @"last_name" : last_name
+        }];
+        [mixpanel identify:mixpanel.distinctId];
     }
    /*
     if(![[[NSUserDefaults standardUserDefaults] objectForKey:@"email"] isEqualToString:self.emailField.text]) {

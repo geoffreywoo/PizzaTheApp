@@ -9,6 +9,7 @@
 #import "PizzaViewController.h"
 #import "PaymentViewController.h"
 #import "SPGooglePlacesAutocompleteDemoViewController.h"
+#import "Mixpanel/Mixpanel.h"
 
 #define RADIANS(degrees) ((degrees * M_PI) / 180.0)
 #define DEGREES_TO_RADIANS(x) (x * M_PI/180.0)
@@ -152,6 +153,8 @@
     NSLog(@"viewWillAppear");
     [super viewWillAppear:animated];
 
+    Mixpanel *mixpanel = [Mixpanel sharedInstance];
+    [mixpanel track:@"pizzaViewController"];
     
     // FIRST TIME LOADING
     if ([[NSUserDefaults standardUserDefaults] boolForKey:@"HasLaunchedOnce"]){
@@ -171,9 +174,6 @@
 - (void)viewDidLoad {
     NSLog(@"viewDidLoad");
     [super viewDidLoad];
-
-    //Mixpanel *mixpanel = [Mixpanel sharedInstance];
-    //[mixpanel track:@"Visit pizza page"];
     
     // Do any additional setup after loading the view from its nib.
     [self setTitle:@"PICK YOUR TOPPINGS"];

@@ -25,5 +25,6 @@
 @property (strong, nonatomic) CLLocation *location;
 @property (strong, nonatomic) IBOutlet MKMapView *mapView;
 @property (nonatomic, retain) CLLocation* initialLocation;
+@property (nonatomic, retain) IBOutlet UITextField *streetAddress2;
 
 @end

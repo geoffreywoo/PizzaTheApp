@@ -11,6 +11,7 @@
 #import <CoreLocation/CoreLocation.h>
 #import "MainViewController.h"
 #import "PaymentViewController.h"
+#import "Mixpanel/Mixpanel.h"
 #define RGB(r,g,b) [UIColor colorWithRed:r/255.0f green:g/255.0f blue:b/255.0f alpha:1.0f]
 #define pizzaRedColor RGB(195,36,43)
 
@@ -69,6 +70,10 @@
      */
 }
 
+-(void)dismissKeyboard {
+    [self.streetAddress2 resignFirstResponder];
+}
+
 - (void) viewWillAppear:(BOOL)animated
 {
     /*
@@ -77,8 +82,19 @@
     self.locationManager.delegate = self;
     [self.locationManager startUpdatingLocation];
      */
+    
+    Mixpanel *mixpanel = [Mixpanel sharedInstance];
+    [mixpanel track:@"mapViewController"];
+    
     self.mapView.showsUserLocation=NO;
     self.mapView.userInteractionEnabled=NO;
+    
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]
+                                   initWithTarget:self
+                                   action:@selector(dismissKeyboard)];
+    
+    [self.view addGestureRecognizer:tap];
+    [tap setCancelsTouchesInView:NO];
 }
 
 - (void) viewWillDisappear:(BOOL)animated
@@ -124,7 +140,9 @@
         [alert show];
     } else {
 
-        [self.locationManager stopUpdatingLocation];
+        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+        [defaults setObject:self.streetAddress2.text forKey:@"UserAddressString2"];
+    
         [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"HasLaunchedOnce"];
         [[NSUserDefaults standardUserDefaults] synchronize];
         [[self navigationController] popToRootViewControllerAnimated:YES];
@@ -437,6 +455,10 @@
                                               otherButtonTitles:@"Yes", nil];
         [alert show];
     } else {
+        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+        [defaults setObject:self.streetAddress2.text forKey:@"UserAddressString2"];
+        [defaults synchronize];
+        
         [self.navigationController popToRootViewControllerAnimated:YES];
     }
     
@@ -452,6 +474,10 @@
                                               otherButtonTitles:@"Yes", nil];
         [alert show];
     } else {
+        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+        [defaults setObject:self.streetAddress2.text forKey:@"UserAddressString2"];
+        [defaults synchronize];
+        
         [self.navigationController popToRootViewControllerAnimated:YES];
     }
 }

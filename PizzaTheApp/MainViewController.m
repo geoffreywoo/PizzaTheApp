@@ -15,25 +15,27 @@
 #import "MJDetailViewController.h"
 #import "Mixpanel.h"
 #import "AFNetworking.h"
+#import "AnimatedGif.h"
+#import "UIImageView+AnimatedGif.h"
 
 //#import <Crashlytics/Crashlytics.h>
 
+/*
 #define STRIPE_KEY @"pk_test_9wPOvSKQ8o5EsuXDWUIBjzlQ"
 #define API_CONFIG @"https://pizzatheapp-staging.herokuapp.com/api/config"
 #define API_ORDERS @"https://pizzatheapp-staging.herokuapp.com/api/orders"
 #define API_CUSTOMERS @"https://pizzatheapp-staging.herokuapp.com/api/customers/"
 #define API_CHECK_PRICES_ZIP @"https://pizzatheapp-staging.herokuapp.com/api/zipCodePrice/"
 #define BASE_URL_RESTAURANTS @"https://pizzatheapp-staging.herokuapp.com/api/closest-restaurants?"
+*/
 
-
-/*
 #define STRIPE_KEY @"pk_live_5l59z07mDTFiUSSxp9UGBYxr"
 #define API_CONFIG @"https://pizzatheapp.herokuapp.com/api/config"
 #define API_ORDERS @"https://pizzatheapp.herokuapp.com/api/orders"
 #define API_CUSTOMERS @"https://pizzatheapp.herokuapp.com/api/customers/"
 #define API_CHECK_PRICES_ZIP @"https://pizzatheapp.herokuapp.com/api/zipCodePrice/"
 #define BASE_URL_RESTAURANTS @"https://pizzatheapp.herokuapp.com/api/closest-restaurants?"
-*/
+
 #define RGB(r,g,b) [UIColor colorWithRed:r/255.0f green:g/255.0f blue:b/255.0f alpha:1.0f]
 #define pizzaRedColor RGB(195,36,43)
 #define backgroundGrey RGB(248,248,248)
@@ -54,16 +56,16 @@
 @implementation MainViewController
 
 - (void) displayPrice {
-    int price = [[NSUserDefaults standardUserDefaults] integerForKey:@"basePrice"]+[[NSUserDefaults standardUserDefaults] integerForKey:@"tipPrice"]+[[NSUserDefaults standardUserDefaults] integerForKey:@"taxAndDeliveryPrice"];
+    self.price = [[NSUserDefaults standardUserDefaults] integerForKey:@"basePrice"]+[[NSUserDefaults standardUserDefaults] integerForKey:@"tipPrice"]+[[NSUserDefaults standardUserDefaults] integerForKey:@"taxAndDeliveryPrice"];
     for(int i = 0; i < [chosenToppings count]; i++){
         if([[chosenToppings objectAtIndex:i] isEqualToString:@"none"]){
             // Do nothing
         } else {
-            price = price + [[NSUserDefaults standardUserDefaults] integerForKey:@"toppingPrice"];
+            self.price = self.price + [[NSUserDefaults standardUserDefaults] integerForKey:@"toppingPrice"];
         }
     }
-    NSLog(@"%d", price);
-    self.priceLabel.text = [NSString stringWithFormat:@"$%d",price];
+    NSLog(@"%d", self.price);
+    self.priceLabel.text = [NSString stringWithFormat:@"$%d",self.price];
 }
 
 - (void) checkPrices {
@@ -91,7 +93,6 @@
         [self displayPrice];
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        [MBProgressHUD hideHUDForView:self.view animated:YES];
         NSLog(@"Error: %@", error.description);
     }];
 }
@@ -119,9 +120,10 @@
             [pricingStore setInteger:taxAndDeliveryPrice forKey:@"taxAndDeliveryPrice"];
             [pricingStore setInteger:basePrice forKey:@"basePrice"];
             [pricingStore synchronize];
+            
+            [self displayPrice];
         
         } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-            [MBProgressHUD hideHUDForView:self.view animated:YES];
             NSLog(@"Error: %@", error.description);
         }];
     }
@@ -146,7 +148,6 @@
             
             
         } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-            [MBProgressHUD hideHUDForView:self.view animated:YES];
             NSLog(@"Error customer card: %@", error.description);
         }];
     }
@@ -176,8 +177,14 @@
     if([[NSUserDefaults standardUserDefaults] objectForKey:@"UserAddressString"] == nil || [[NSUserDefaults standardUserDefaults] objectForKey:@"zipCode"] == nil || [[[[NSUserDefaults standardUserDefaults] objectForKey:@"UserAddressString"] componentsSeparatedByString:@","] count]<2){
         userAddress = @"No address set";
     } else {
-        userAddress = [NSString stringWithFormat:@"%@, %@ %@", [[[[NSUserDefaults standardUserDefaults] objectForKey:@"UserAddressString"] componentsSeparatedByString:@","] objectAtIndex:0], [[[[NSUserDefaults standardUserDefaults] objectForKey:@"UserAddressString"] componentsSeparatedByString:@","] objectAtIndex:1], [[NSUserDefaults standardUserDefaults] objectForKey:@"zipCode"]];
+        if ([[NSUserDefaults standardUserDefaults] objectForKey:@"UserAddressString2"] == nil || [[[NSUserDefaults standardUserDefaults] objectForKey:@"UserAddressString2"] isEqualToString:@""]) {
+            userAddress = [NSString stringWithFormat:@"%@, %@ %@", [[[[NSUserDefaults standardUserDefaults] objectForKey:@"UserAddressString"] componentsSeparatedByString:@","] objectAtIndex:0], [[[[NSUserDefaults standardUserDefaults] objectForKey:@"UserAddressString"] componentsSeparatedByString:@","] objectAtIndex:1], [[NSUserDefaults standardUserDefaults] objectForKey:@"zipCode"]];
+        } else {
+            userAddress = [NSString stringWithFormat:@"%@ #%@, %@ %@", [[[[NSUserDefaults standardUserDefaults] objectForKey:@"UserAddressString"] componentsSeparatedByString:@","] objectAtIndex:0], [[NSUserDefaults standardUserDefaults] objectForKey:@"UserAddressString2"], [[[[NSUserDefaults standardUserDefaults] objectForKey:@"UserAddressString"] componentsSeparatedByString:@","] objectAtIndex:1], [[NSUserDefaults standardUserDefaults] objectForKey:@"zipCode"]];
+        }
+        
         NSLog(@"%@",[[NSUserDefaults standardUserDefaults] objectForKey:@"UserAddressString"]);
+        NSLog(@"%@",[[NSUserDefaults standardUserDefaults] objectForKey:@"UserAddressString2"]);
     }
     
     
@@ -301,8 +308,6 @@
     self.priceLabel.textColor = [UIColor colorWithRed:255.0f green:255.0f blue:255.0f alpha:0.75f];
     self.priceLabel.font = [UIFont fontWithName:@"Verlag-Black" size:20];
     [self.confirmButton addSubview:self.priceLabel];
-    
-    [self displayPrice];
 }
 
 - (void) viewWillAppear:(BOOL)animated
@@ -323,6 +328,9 @@
         [self.navigationController pushViewController:sec animated:YES];
     }
     
+    Mixpanel *mixpanel = [Mixpanel sharedInstance];
+    [mixpanel track:@"mainViewController"];
+    
     [self settingsButton];
     
     [self yourPizzaLabel];
@@ -332,6 +340,86 @@
     [self placeConfirmButton];
     
     [self checkPrices];
+    
+    [self setupWaitingGif];
+
+   // UIImageView * newImageView = [[UIImageView alloc] initWithFrame:CGRectMake(10, 20, 300, 200)];
+
+    //[self.view bringSubviewToFront:self.waitingScreen];
+    //[self.view addSubview:newImageView];
+}
+
+- (void) setupWaitingGif {
+    self.waitingText.font = [UIFont fontWithName:@"Verlag-Bold" size:18];
+    
+    screenRect = [[UIScreen mainScreen] bounds];
+    
+    self.waitingScreen = [[UIImageView alloc] initWithFrame:screenRect];
+    [self.waitingScreen setImage:[UIImage imageNamed:@"blackOverlay.png"]];
+    [self.waitingScreen setUserInteractionEnabled:YES];
+}
+
+- (void) showWaitingGif {
+    self.waitingGIF = [[UIImageView alloc] initWithFrame:CGRectMake((screenRect.size.width-200)/2,(screenRect.size.height-200)/2,200,200)];
+    [self.waitingGIF setContentMode:UIViewContentModeScaleAspectFit];
+    
+    [self.waitingText setFrame:CGRectMake((screenRect.size.width-200)/2,(screenRect.size.height-200)/2-30,200,30)];
+    
+    NSInteger randomNumber = arc4random() % 5;
+    switch (randomNumber)
+    {
+        case 0: {
+            NSData * animationData = [NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"dancingpizzas.gif" ofType:nil]];
+            AnimatedGif * animation = [AnimatedGif getAnimationForGifWithData:animationData];
+            [self.waitingGIF setAnimatedGif:animation startImmediately:YES];
+            break;
+        }
+        case 1: {
+            NSData * animationData = [NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"spongebob.gif" ofType:nil]];
+            AnimatedGif * animation = [AnimatedGif getAnimationForGifWithData:animationData];
+            [self.waitingGIF setAnimatedGif:animation startImmediately:YES];
+            break;
+        }
+        case 2: {
+            NSData * animationData = [NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"pizzacat.gif" ofType:nil]];
+            AnimatedGif * animation = [AnimatedGif getAnimationForGifWithData:animationData];
+            [self.waitingGIF setAnimatedGif:animation startImmediately:YES];
+            break;
+        }
+        case 3: {
+            NSData * animationData = [NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"ninjaturtle.gif" ofType:nil]];
+            AnimatedGif * animation = [AnimatedGif getAnimationForGifWithData:animationData];
+            [self.waitingGIF setAnimatedGif:animation startImmediately:YES];
+            break;
+        }
+        case 4: {
+            NSData * animationData = [NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"cowboy.gif" ofType:nil]];
+            AnimatedGif * animation = [AnimatedGif getAnimationForGifWithData:animationData];
+            [self.waitingGIF setAnimatedGif:animation startImmediately:YES];
+            break;
+        }
+            
+    }
+    
+
+    
+    
+
+    
+    [self.navigationController.view addSubview:self.waitingScreen];
+    
+    
+    [self.navigationController.view addSubview:self.waitingGIF];
+    self.waitingGIF.hidden = NO;
+    [self.navigationController.view addSubview:self.waitingText];
+    self.waitingText.hidden = NO;
+}
+
+- (void) hideWaitingGif {
+    self.waitingGIF.hidden = YES;
+    self.waitingText.hidden = YES;
+    
+    [self.waitingScreen removeFromSuperview];
 }
 
 - (void) viewDidLoad {
@@ -402,7 +490,8 @@
 - (void)getRestaurantIDs {
     NSLog(@"getting restaurant ids");
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    //[MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    [self showWaitingGif];
     
     NSString *BaseURL = BASE_URL_RESTAURANTS;
     /*NSString *address1 = @"341 Jersey Street";
@@ -413,7 +502,8 @@
     NSLog(@"Customer ID: %@", [orderInfo objectForKey:@"customerID"]);
     
     NSString *address1 = [[[orderInfo objectForKey:@"UserAddressString"] componentsSeparatedByString:@","] objectAtIndex:0];
-    NSString *address2 = @"";
+    NSString *address2 = ([orderInfo objectForKey:@"UserAddressString2"] != nil) ? [orderInfo objectForKey:@"UserAddressString2"] : @"";
+
     NSString *zip = [orderInfo objectForKey:@"zipCode"];
 
     //https://pizzatheapp-staging.herokuapp.com/api/closest-restaurants?address1=201%20Post%20St&address2=&zip=94108&toppings=
@@ -503,8 +593,15 @@
          [self submitOrderToServer];
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-         [MBProgressHUD hideHUDForView:self.view animated:YES];
-         NSLog(@"Error Restaurants: %@", error.description);
+        // [MBProgressHUD hideHUDForView:self.view animated:YES];
+        [self hideWaitingGif];
+        NSLog(@"Error Restaurants: %@", error.description);
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Oops!"
+                                                        message:@"We're not in your area or are closed!"
+                                                       delegate:self
+                                              cancelButtonTitle:@"Ok, thanks!"
+                                              otherButtonTitles: nil];
+        [alert show];
     }];
 }
 
@@ -516,6 +613,7 @@
     NSLog(@"Customer ID: %@", [orderInfo objectForKey:@"customerID"]);
     
     NSString *streetAddress = [[[orderInfo objectForKey:@"UserAddressString"] componentsSeparatedByString:@","] objectAtIndex:0];
+    NSString *streetAddress2 = ([orderInfo objectForKey:@"UserAddressString2"] != nil) ? [orderInfo objectForKey:@"UserAddressString2"] : @"";
     NSString *customerID = [orderInfo objectForKey:@"customerID"];
     NSString *zipCode = [orderInfo objectForKey:@"zipCode"];
     NSString *phoneNumber = [orderInfo objectForKey:@"customerPhone"];
@@ -540,13 +638,15 @@
         [formattedToppingsForSubmission removeObjectIdenticalTo:@"none"];
         NSLog(@"Array of toppings submitting: %@", formattedToppingsForSubmission);
         
+        NSString *firstName = [[NSUserDefaults standardUserDefaults] objectForKey:@"first_name"];
+        NSString *lastName = [[NSUserDefaults standardUserDefaults] objectForKey:@"last_name"];
         NSDictionary *params = @{@"phone": phoneNumber,
                                  @"stripeCustomerId": customerID,
-                                 @"firstName": @"Joey",
-                                 @"lastName": @"Pepperoni",
+                                 @"firstName": firstName,
+                                 @"lastName": lastName,
                                  @"email": @"",
                                  @"delivery_address": streetAddress,
-                                 @"delivery_apartment": @"",
+                                 @"delivery_apartment": streetAddress2,
                                  @"delivery_zip": zipCode,
                                  @"restaurantIds": restaurantIDList,
                                  @"toppings": formattedToppingsForSubmission};
@@ -558,31 +658,30 @@
             NSLog(@"Response: %@", responseObject);
             
             if ([responseObject objectForKey:@"error"]==nil) {
+                [self hideWaitingGif];
+                
                 MJDetailViewController *detailViewController = [[MJDetailViewController alloc] initWithNibName:@"MJDetailViewController" bundle:nil];
                 [self presentPopupViewController:detailViewController animationType:MJPopupViewAnimationSlideBottomBottom];
                 
+                NSNumber *nsprice = [NSNumber numberWithInt:self.price];
                 Mixpanel *mixpanel = [Mixpanel sharedInstance];
-                [mixpanel identify:mixpanel.distinctId];
-                
-                
-                int price = [[NSUserDefaults standardUserDefaults] integerForKey:@"basePrice"]+[[NSUserDefaults standardUserDefaults] integerForKey:@"tipPrice"];
-                for(int i = 0; i < [chosenToppings count]; i++){
-                    if([[chosenToppings objectAtIndex:i] isEqualToString:@"none"]){
-                        // Do nothing
-                    } else {
-                        price = price + [[NSUserDefaults standardUserDefaults] integerForKey:@"toppingPrice"];
-                    }
-                }
-                NSNumber *nsprice = [NSNumber numberWithInt:price];
                 [mixpanel.people trackCharge:nsprice];
-                [MBProgressHUD hideHUDForView:self.view animated:YES];
+                //[MBProgressHUD hideHUDForView:self.view animated:YES];
+    
                 [mixpanel.people increment:@{
                                              @"dollars spent":nsprice,
                                              @"pizzas ordered":@1
                                              }];
                 
+                NSString *pizzaToppings = [formattedToppingsForSubmission componentsJoinedByString: @","];
+                [mixpanel track:@"Pizza Toppings" properties:@{
+                                                              @"toppings":pizzaToppings
+                                                              }];
+                
+                
             } else {
-                [MBProgressHUD hideHUDForView:self.view animated:YES];
+                //[MBProgressHUD hideHUDForView:self.view animated:YES];
+                [self hideWaitingGif];
                 UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Oops!"
                                                                 message:@"We're not in your area or are closed!"
                                                                delegate:self
@@ -594,7 +693,8 @@
             
         } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
             NSLog(@"Error: %@", error.description);
-            [MBProgressHUD hideHUDForView:self.view animated:YES];
+            //[MBProgressHUD hideHUDForView:self.view animated:YES];
+            [self hideWaitingGif];
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Oops!"
                                                             message:@"We're not in your area or are closed!"
                                                            delegate:self

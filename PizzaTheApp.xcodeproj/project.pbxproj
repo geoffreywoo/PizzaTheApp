@@ -7,6 +7,15 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		600A938B197624CC00B4E5A0 /* search_bar.png in Resources */ = {isa = PBXBuildFile; fileRef = 600A938A197624CC00B4E5A0 /* search_bar.png */; };
+		600A938E1977396000B4E5A0 /* AnimatedGif.m in Sources */ = {isa = PBXBuildFile; fileRef = 600A938D1977396000B4E5A0 /* AnimatedGif.m */; };
+		600A93911977396900B4E5A0 /* UIImageView+AnimatedGif.m in Sources */ = {isa = PBXBuildFile; fileRef = 600A93901977396900B4E5A0 /* UIImageView+AnimatedGif.m */; };
+		600A939519773A1C00B4E5A0 /* spongebob.gif in Resources */ = {isa = PBXBuildFile; fileRef = 600A939319773A1C00B4E5A0 /* spongebob.gif */; };
+		600A939619773A1C00B4E5A0 /* dancingpizzas.gif in Resources */ = {isa = PBXBuildFile; fileRef = 600A939419773A1C00B4E5A0 /* dancingpizzas.gif */; };
+		600A93991977473900B4E5A0 /* blackOverlay.png in Resources */ = {isa = PBXBuildFile; fileRef = 600A93981977473900B4E5A0 /* blackOverlay.png */; };
+		600A939C1977534400B4E5A0 /* ninjaturtle.gif in Resources */ = {isa = PBXBuildFile; fileRef = 600A939A1977534400B4E5A0 /* ninjaturtle.gif */; };
+		600A939D1977534400B4E5A0 /* pizzacat.gif in Resources */ = {isa = PBXBuildFile; fileRef = 600A939B1977534400B4E5A0 /* pizzacat.gif */; };
+		600A939F197753A300B4E5A0 /* cowboy.gif in Resources */ = {isa = PBXBuildFile; fileRef = 600A939E197753A300B4E5A0 /* cowboy.gif */; };
 		607F559D1960DE3900926E1A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 607F559C1960DE3900926E1A /* Foundation.framework */; };
 		607F559F1960DE3900926E1A /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 607F559E1960DE3900926E1A /* CoreGraphics.framework */; };
 		607F55A11960DE3900926E1A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 607F55A01960DE3900926E1A /* UIKit.framework */; };
@@ -116,6 +125,17 @@
 /* Begin PBXFileReference section */
 		0A764387439F404E94B2916A /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		311EEDC2AD954DD08A160DEA /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
+		600A938A197624CC00B4E5A0 /* search_bar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = search_bar.png; sourceTree = "<group>"; };
+		600A938C1977396000B4E5A0 /* AnimatedGif.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AnimatedGif.h; sourceTree = "<group>"; };
+		600A938D1977396000B4E5A0 /* AnimatedGif.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AnimatedGif.m; sourceTree = "<group>"; };
+		600A938F1977396900B4E5A0 /* UIImageView+AnimatedGif.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImageView+AnimatedGif.h"; sourceTree = "<group>"; };
+		600A93901977396900B4E5A0 /* UIImageView+AnimatedGif.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImageView+AnimatedGif.m"; sourceTree = "<group>"; };
+		600A939319773A1C00B4E5A0 /* spongebob.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = spongebob.gif; sourceTree = "<group>"; };
+		600A939419773A1C00B4E5A0 /* dancingpizzas.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = dancingpizzas.gif; sourceTree = "<group>"; };
+		600A93981977473900B4E5A0 /* blackOverlay.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = blackOverlay.png; sourceTree = "<group>"; };
+		600A939A1977534400B4E5A0 /* ninjaturtle.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = ninjaturtle.gif; sourceTree = "<group>"; };
+		600A939B1977534400B4E5A0 /* pizzacat.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = pizzacat.gif; sourceTree = "<group>"; };
+		600A939E197753A300B4E5A0 /* cowboy.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = cowboy.gif; sourceTree = "<group>"; };
 		607F55991960DE3900926E1A /* PizzaTheApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PizzaTheApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		607F559C1960DE3900926E1A /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		607F559E1960DE3900926E1A /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -253,6 +273,29 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		600A93921977396E00B4E5A0 /* AnimatedGIF */ = {
+			isa = PBXGroup;
+			children = (
+				600A938F1977396900B4E5A0 /* UIImageView+AnimatedGif.h */,
+				600A93901977396900B4E5A0 /* UIImageView+AnimatedGif.m */,
+				600A938C1977396000B4E5A0 /* AnimatedGif.h */,
+				600A938D1977396000B4E5A0 /* AnimatedGif.m */,
+			);
+			name = AnimatedGIF;
+			sourceTree = "<group>";
+		};
+		600A939719773A2900B4E5A0 /* GIF */ = {
+			isa = PBXGroup;
+			children = (
+				600A939E197753A300B4E5A0 /* cowboy.gif */,
+				600A939A1977534400B4E5A0 /* ninjaturtle.gif */,
+				600A939B1977534400B4E5A0 /* pizzacat.gif */,
+				600A939319773A1C00B4E5A0 /* spongebob.gif */,
+				600A939419773A1C00B4E5A0 /* dancingpizzas.gif */,
+			);
+			name = GIF;
+			sourceTree = "<group>";
+		};
 		607F55901960DE3900926E1A = {
 			isa = PBXGroup;
 			children = (
@@ -298,6 +341,7 @@
 				60A6A9361960DFEC009D99AA /* PaymentViewController.m */,
 				607F55AE1960DE3A00926E1A /* Main_iPhone.storyboard */,
 				607F55B11960DE3A00926E1A /* Main_iPad.storyboard */,
+				600A93921977396E00B4E5A0 /* AnimatedGIF */,
 				60A6A9E219632D6A009D99AA /* sounds */,
 				60A6A9B619613DF8009D99AA /* MJViews */,
 				60A6A9B719613E02009D99AA /* SPGooglePlaces */,
@@ -351,6 +395,9 @@
 		60A6A9B519613519009D99AA /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				600A93981977473900B4E5A0 /* blackOverlay.png */,
+				600A939719773A2900B4E5A0 /* GIF */,
+				600A938A197624CC00B4E5A0 /* search_bar.png */,
 				60A6AA0219638DC1009D99AA /* x.png */,
 				60A6A9F719632F5D009D99AA /* Icons */,
 				60A6A9F819632F96009D99AA /* olives-bg@2x.png */,
@@ -558,6 +605,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				60A6A9D719622695009D99AA /* Verlag Black Italic.otf in Resources */,
+				600A939F197753A300B4E5A0 /* cowboy.gif in Resources */,
 				60A6A9D819622695009D99AA /* Verlag Black.otf in Resources */,
 				60A6A9D919622695009D99AA /* Verlag Bold Italic.otf in Resources */,
 				60A6A9DA19622695009D99AA /* Verlag Bold.otf in Resources */,
@@ -565,13 +613,17 @@
 				60A6A9FE19632F96009D99AA /* peppers-bg@2x.png in Resources */,
 				60A6A9DB19622695009D99AA /* Verlag Book Italic.otf in Resources */,
 				60A6A9F419632D6A009D99AA /* peppersGuitar.aif in Resources */,
+				600A939D1977534400B4E5A0 /* pizzacat.gif in Resources */,
 				60A6A9DC19622695009D99AA /* Verlag Book.otf in Resources */,
 				60A6A9DD19622695009D99AA /* Verlag Light Italic.otf in Resources */,
 				60A6A9DE19622695009D99AA /* Verlag Light.otf in Resources */,
+				600A939C1977534400B4E5A0 /* ninjaturtle.gif in Resources */,
 				60A6A9DF19622695009D99AA /* Verlag XLight Italic.otf in Resources */,
+				600A939519773A1C00B4E5A0 /* spongebob.gif in Resources */,
 				60A6AA061964B247009D99AA /* settings2-icon.png in Resources */,
 				60A6A9E019622695009D99AA /* Verlag XLight.otf in Resources */,
 				60A6AA071964B247009D99AA /* settings2-icon@2x.png in Resources */,
+				600A93991977473900B4E5A0 /* blackOverlay.png in Resources */,
 				60A6AA0119632F96009D99AA /* sausage-bg@2x.png in Resources */,
 				60A6A9E119622695009D99AA /* Verlag-Book.otf in Resources */,
 				60A6A9CD196224DE009D99AA /* header-logo.png in Resources */,
@@ -580,6 +632,7 @@
 				60A6A9ED19632D6A009D99AA /* mushroomsDrum.aif in Resources */,
 				60A6A9811960E2FF009D99AA /* chevron - forward@2x.png in Resources */,
 				607F55B31960DE3A00926E1A /* Main_iPad.storyboard in Resources */,
+				600A939619773A1C00B4E5A0 /* dancingpizzas.gif in Resources */,
 				607F55B81960DE3A00926E1A /* Images.xcassets in Resources */,
 				60A6A98F1960E308009D99AA /* location@2x.png in Resources */,
 				60A6A9C9196224DE009D99AA /* 80x80.png in Resources */,
@@ -608,6 +661,7 @@
 				60A6A9741960E087009D99AA /* MJDetailViewController.xib in Resources */,
 				60A6A9D5196224DE009D99AA /* plateFull.png in Resources */,
 				60A6A99A1960E314009D99AA /* olives.png in Resources */,
+				600A938B197624CC00B4E5A0 /* search_bar.png in Resources */,
 				60A6A9F219632D6A009D99AA /* pepperoniGuitar.aif in Resources */,
 				60A6A9A91960E328009D99AA /* sausagenew.png in Resources */,
 				60A6A9A51960E31F009D99AA /* pizza.png in Resources */,
@@ -683,6 +737,7 @@
 				60A6A94D1960E03A009D99AA /* SPGooglePlacesAutocompletePlace.m in Sources */,
 				607F55A91960DE3A00926E1A /* main.m in Sources */,
 				60A6A9731960E087009D99AA /* MJDetailViewController.m in Sources */,
+				600A93911977396900B4E5A0 /* UIImageView+AnimatedGif.m in Sources */,
 				60A6A9371960DFEC009D99AA /* PaymentViewController.m in Sources */,
 				60A6A9341960DFA7009D99AA /* MainViewController.m in Sources */,
 				60A6A9751960E087009D99AA /* MJPopupBackgroundView.m in Sources */,
@@ -693,6 +748,7 @@
 				60A6A93A1960E005009D99AA /* PizzaViewController.m in Sources */,
 				60A6A93E1960E019009D99AA /* MBProgressHUD.m in Sources */,
 				60A6A94B1960E03A009D99AA /* SPGooglePlacesAutocompleteDemoViewController.m in Sources */,
+				600A938E1977396000B4E5A0 /* AnimatedGif.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
