@@ -121,7 +121,7 @@ static void * const keypath = (void*)&keypath;
     popupView.layer.cornerRadius = 15;
     
     //Add UILabel
-    UILabel *successLabel = [[UILabel alloc] initWithFrame:CGRectMake(5, 5, popupView.frame.size.width-10, popupView.frame.size.height-10)];
+    UILabel *successLabel = [[UILabel alloc] initWithFrame:CGRectMake(5, 20, popupView.frame.size.width-10, 30)];
     successLabel.textColor = [UIColor blackColor];
     successLabel.text = [NSString stringWithFormat:@"YOUR PIZZA IS ON ITS WAY!"];
     successLabel.font = [UIFont fontWithName:@"Verlag-Black" size:15];
@@ -129,7 +129,7 @@ static void * const keypath = (void*)&keypath;
     [popupView addSubview:successLabel];
     
     UIButton *shareButton = [UIButton buttonWithType:UIButtonTypeCustom ];
-    shareButton.frame = CGRectMake(15,   popupView.frame.size.height-70,  popupView.frame.size.width-30, 55);
+    shareButton.frame = CGRectMake(15, popupView.frame.size.height-65,  popupView.frame.size.width-30, 55);
     [shareButton setTitle:[NSString stringWithFormat:@"SHARE THE PIZZA LOVE!"] forState:UIControlStateNormal];
     shareButton.titleLabel.font = [UIFont fontWithName:@"Verlag-Black" size:15];
     shareButton.layer.cornerRadius = 5;

@@ -13,16 +13,17 @@
 #import "PKView.h"
 #import "Mixpanel/Mixpanel.h"
 
-/*
+
 #define STRIPE_KEY @"pk_test_9wPOvSKQ8o5EsuXDWUIBjzlQ"
 #define API_ORDERS @"https://pizzatheapp-staging.herokuapp.com/api/orders"
 #define API_CUSTOMERS @"https://pizzatheapp-staging.herokuapp.com/api/customers/"
-*/
 
+/*
 #define STRIPE_KEY @"pk_live_5l59z07mDTFiUSSxp9UGBYxr"
 #define API_ORDERS @"https://pizzatheapp.herokuapp.com/api/orders"
 #define API_CUSTOMERS @"https://pizzatheapp.herokuapp.com/api/customers/"
- 
+ */
+
 #define DefaultBoldFont [UIFont boldSystemFontOfSize:17]
 #define RGB(r,g,b) [UIColor colorWithRed:r/255.0f green:g/255.0f blue:b/255.0f alpha:1.0f]
 #define DarkGreyColor RGB(247,247,247)

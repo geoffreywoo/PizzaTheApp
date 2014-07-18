@@ -17,10 +17,10 @@
 //#import <GoogleMaps/GoogleMaps.h>
 
 //DEV
-//#define MIXPANEL_TOKEN @"7ffd3d234a64a8a9090bad210ca45ffe"
+#define MIXPANEL_TOKEN @"7ffd3d234a64a8a9090bad210ca45ffe"
 
 //PROD
-#define MIXPANEL_TOKEN @"b8819bb36b67775692aacd6b2845a6a7"
+//#define MIXPANEL_TOKEN @"b8819bb36b67775692aacd6b2845a6a7"
 #define RGB(r,g,b) [UIColor colorWithRed:r/255.0f green:g/255.0f blue:b/255.0f alpha:1.0f]
 #define pizzaRedColor RGB(195,36,43)
 

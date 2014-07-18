@@ -20,21 +20,22 @@
 
 //#import <Crashlytics/Crashlytics.h>
 
-/*
+
 #define STRIPE_KEY @"pk_test_9wPOvSKQ8o5EsuXDWUIBjzlQ"
 #define API_CONFIG @"https://pizzatheapp-staging.herokuapp.com/api/config"
 #define API_ORDERS @"https://pizzatheapp-staging.herokuapp.com/api/orders"
 #define API_CUSTOMERS @"https://pizzatheapp-staging.herokuapp.com/api/customers/"
 #define API_CHECK_PRICES_ZIP @"https://pizzatheapp-staging.herokuapp.com/api/zipCodePrice/"
 #define BASE_URL_RESTAURANTS @"https://pizzatheapp-staging.herokuapp.com/api/closest-restaurants?"
-*/
 
+/*
 #define STRIPE_KEY @"pk_live_5l59z07mDTFiUSSxp9UGBYxr"
 #define API_CONFIG @"https://pizzatheapp.herokuapp.com/api/config"
 #define API_ORDERS @"https://pizzatheapp.herokuapp.com/api/orders"
 #define API_CUSTOMERS @"https://pizzatheapp.herokuapp.com/api/customers/"
 #define API_CHECK_PRICES_ZIP @"https://pizzatheapp.herokuapp.com/api/zipCodePrice/"
 #define BASE_URL_RESTAURANTS @"https://pizzatheapp.herokuapp.com/api/closest-restaurants?"
+*/
 
 #define RGB(r,g,b) [UIColor colorWithRed:r/255.0f green:g/255.0f blue:b/255.0f alpha:1.0f]
 #define pizzaRedColor RGB(195,36,43)
@@ -489,10 +490,6 @@
 
 - (void)getRestaurantIDs {
     NSLog(@"getting restaurant ids");
-    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    //[MBProgressHUD showHUDAddedTo:self.view animated:YES];
-    [self showWaitingGif];
-    
     NSString *BaseURL = BASE_URL_RESTAURANTS;
     /*NSString *address1 = @"341 Jersey Street";
     NSString *address2 = @"";
@@ -505,6 +502,18 @@
     NSString *address2 = ([orderInfo objectForKey:@"UserAddressString2"] != nil) ? [orderInfo objectForKey:@"UserAddressString2"] : @"";
 
     NSString *zip = [orderInfo objectForKey:@"zipCode"];
+    if (!zip) {
+        NSLog(@"no zip");
+        [self GoToMapSearchPage:nil];
+        return;
+    }
+    if (!address1) {
+        NSLog(@"no address 1");
+        [self GoToMapSearchPage:nil];
+        return;
+    }
+    
+    [self showWaitingGif];
 
     //https://pizzatheapp-staging.herokuapp.com/api/closest-restaurants?address1=201%20Post%20St&address2=&zip=94108&toppings=
     
@@ -567,13 +576,11 @@
     
     NSLog(@"GET REQUEST STRING: %@", getRequestString);
     NSLog(@"URL ENCODED GET REQUEST STRING: %@", urlEncodedString);
-    
-     [manager GET: urlEncodedString parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        
-        
-        NSLog(@"JSON: %@", responseObject);
 
-         
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    [manager.requestSerializer setTimeoutInterval:25];
+    [manager GET: urlEncodedString parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSLog(@"JSON: %@", responseObject);
         //CREATING
          
          NSArray *restaurants = [responseObject objectForKey:@"restaurants"];

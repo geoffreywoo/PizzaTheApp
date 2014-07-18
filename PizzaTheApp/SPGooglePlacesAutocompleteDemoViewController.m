@@ -152,44 +152,6 @@
     }
 }
 
-- (IBAction)performCoordinateGeocode:(id)sender
-{
-    //[self lockUI:YES];
-    
-    CLLocationCoordinate2D center = mapView.centerCoordinate;
-    CLLocation *location = [[CLLocation alloc] initWithLatitude:center.latitude longitude:center.longitude];
-    
-    CLGeocoder *geocoder = [[CLGeocoder alloc] init];
-    
-    
-    [geocoder reverseGeocodeLocation:location completionHandler:^(NSArray *placemarks, NSError *error) {
-        if (error){
-            NSLog(@"Geocode failed with error!");
-            return;
-        }
-        NSLog(@"Received placemarks: %@", placemarks);
-        
-        CLPlacemark *placemark = [placemarks objectAtIndex:0];
-        NSLog(@"%@ %@ %@ %@",[placemark locality], [placemark subLocality], [placemark thoroughfare], [placemark subThoroughfare]);
-        if([placemark subThoroughfare]==NULL || [placemark thoroughfare] == NULL || [placemark locality] == NULL || [placemark   postalCode] == NULL){
-            self.searchDisplayController.searchBar.placeholder = [NSString stringWithFormat:@"Finding your location..."];
-        } else{
-            self.searchDisplayController.searchBar.placeholder = [NSString stringWithFormat:@"%@ %@, %@ %@",[placemark subThoroughfare],[placemark thoroughfare], [placemark locality], [placemark   postalCode]];
-            NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-            [defaults setObject:[NSString stringWithFormat:@"%@ %@,%@",[placemark subThoroughfare],[placemark thoroughfare], [placemark locality]] forKey:@"UserAddressString"];
-            [defaults setObject:[NSString stringWithFormat:@"%@",[placemark   postalCode]] forKey:@"zipCode"];
-            [defaults synchronize];
-        }
-        
-    }];
-    
-    UIView * v = [self.view viewWithTag:1];
-    if (v != nil) {
-        [v removeFromSuperview];
-    }
-
-}
-
 
 - (IBAction)recenterMapToUserLocation:(id)sender {
     MKCoordinateRegion region;
@@ -237,6 +199,7 @@
 #pragma mark UITableViewDelegate
 
 - (void)recenterMapToPlacemark:(CLPlacemark *)placemark {
+    NSLog(@"recenterMapToPlacemark");
     MKCoordinateRegion region;
     MKCoordinateSpan span;
     
@@ -248,9 +211,15 @@
     NSLog(@"%@", placemark.postalCode);
     [self.mapView setRegion:region];
     
-    NSUserDefaults *zipStore = [NSUserDefaults standardUserDefaults];
-    [zipStore setObject:[NSString stringWithFormat:@"%@", placemark.postalCode] forKey:@"zipCode"];
-    [zipStore synchronize];
+    if (placemark.postalCode) {
+        NSUserDefaults *zipStore = [NSUserDefaults standardUserDefaults];
+        [zipStore setObject:[NSString stringWithFormat:@"%@", placemark.postalCode] forKey:@"zipCode"];
+        [zipStore synchronize];
+    } else {
+        NSUserDefaults *zipStore = [NSUserDefaults standardUserDefaults];
+        [zipStore removeObjectForKey:@"zipCode"];
+        [zipStore synchronize];
+    }
 }
 
 
@@ -302,27 +271,23 @@
             dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
                 
                 NSLog(@"ADDRESS STRING: %@", addressString);
+                NSLog(@"Postal Code: %@", [placemark postalCode]);
+                
                 NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
                 [defaults setObject:[NSString stringWithFormat:@"%@", addressString] forKey:@"UserAddressString"];
                 [defaults synchronize];
+
                 
-                if([[NSUserDefaults standardUserDefaults] objectForKey:@"UserAddressString"] == nil || [[NSUserDefaults standardUserDefaults] objectForKey:@"zipCode"] == nil || [[[[NSUserDefaults standardUserDefaults] objectForKey:@"UserAddressString"] componentsSeparatedByString:@","] count]<2){
+                [defaults synchronize];
+                
+                if([[NSUserDefaults standardUserDefaults] objectForKey:@"UserAddressString"] == nil || [[NSUserDefaults standardUserDefaults] objectForKey:@"zipCode"] == nil || [[[NSUserDefaults standardUserDefaults] objectForKey:@"zipCode"] isEqualToString:@"(null)"] || [[[[NSUserDefaults standardUserDefaults] objectForKey:@"UserAddressString"] componentsSeparatedByString:@","] count]<2){
                         NSLog(@"No address set");
                 } else {
                     self.searchDisplayController.searchBar.placeholder = [NSString stringWithFormat:@"%@, %@ %@", [[addressString componentsSeparatedByString:@","] objectAtIndex:0], [[addressString componentsSeparatedByString:@","] objectAtIndex:1], [defaults valueForKey:@"zipCode"]];
                 }
                 shouldBeginEditing = NO;
                 [self.searchDisplayController setActive:NO];
-              //  [self.mapView removeAnnotation:selectedPlaceAnnotation];
-                
-                //[self sendToOverviewScreen];
             });
-            
-            
-            /*shouldBeginEditing = NO;
-            [self.searchDisplayController setActive:NO];
-            [self.mapView removeAnnotation:selectedPlaceAnnotation];*/ 
-            
         }
     }];
 }
@@ -452,7 +417,7 @@
                                                         message:@"Are you sure that's the right address?"
                                                        delegate:self
                                               cancelButtonTitle:@"Hm, I'll try again."
-                                              otherButtonTitles:@"Yes", nil];
+                                              otherButtonTitles:nil];
         [alert show];
     } else {
         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
@@ -471,7 +436,7 @@
                                                         message:@"Are you sure that's the right address?"
                                                        delegate:self
                                               cancelButtonTitle:@"Hm, I'll try again."
-                                              otherButtonTitles:@"Yes", nil];
+                                              otherButtonTitles:nil];
         [alert show];
     } else {
         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
