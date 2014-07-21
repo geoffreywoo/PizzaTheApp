@@ -37,6 +37,20 @@
     
     [application registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
     
+    // Customize the title text for *all* UINavigationBars
+    [[UINavigationBar appearance] setTitleTextAttributes:
+     [NSDictionary dictionaryWithObjectsAndKeys:
+      [UIFont fontWithName:@"Verlag-Bold" size:18.0],
+      NSFontAttributeName,
+      nil]];
+    
+    [[UIBarButtonItem appearance] setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:
+                                                          [UIFont fontWithName:@"Verlag-Bold" size:18.0],
+                                                          NSFontAttributeName,
+                                                          nil] forState:UIControlStateNormal];
+     
+     
+    
     return YES;
 }
 

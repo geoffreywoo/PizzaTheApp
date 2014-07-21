@@ -41,6 +41,8 @@
    // Mixpanel *mixpanel = [Mixpanel sharedInstance];
     //[mixpanel track:@"Visit map page"];
     
+    [self setTitle:@"SET DELIVERY LOCATION"];
+    
     // FIRST TIME LOADING
     if ([[NSUserDefaults standardUserDefaults] boolForKey:@"HasLaunchedOnce"]){
         
@@ -95,6 +97,8 @@
     
     [self.view addGestureRecognizer:tap];
     [tap setCancelsTouchesInView:NO];
+    
+    [self centerOnSavedPlacemark];
 }
 
 - (void) viewWillDisappear:(BOOL)animated
@@ -195,8 +199,30 @@
 
 }
 
-#pragma mark -
-#pragma mark UITableViewDelegate
+- (void)centerOnSavedPlacemark {
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    if ([defaults doubleForKey:@"placemarkLatitude"] && [defaults doubleForKey:@"placemarkLongitude"] && [defaults objectForKey:@"UserAddressString"]) {
+        CLLocationCoordinate2D center;
+        center.latitude = [defaults doubleForKey:@"placemarkLatitude"];
+        center.longitude = [defaults doubleForKey:@"placemarkLongitude"];
+        
+        MKCoordinateRegion region;
+        MKCoordinateSpan span;
+        
+        span.latitudeDelta = 0.005;
+        span.longitudeDelta = 0.005;
+        
+        region.span = span;
+        region.center = center;
+        [self.mapView setRegion:region];
+        
+        selectedPlaceAnnotation = [[MKPointAnnotation alloc] init];
+        selectedPlaceAnnotation.coordinate = center;
+        selectedPlaceAnnotation.title = [defaults objectForKey:@"UserAddressString"];
+        [self.mapView addAnnotation:selectedPlaceAnnotation];
+    }
+}
+
 
 - (void)recenterMapToPlacemark:(CLPlacemark *)placemark {
     NSLog(@"recenterMapToPlacemark");
@@ -249,6 +275,10 @@
     [self.searchDisplayController.searchBar resignFirstResponder];
 }
 
+
+#pragma mark -
+#pragma mark UITableViewDelegate
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     NSLog(@"Search 5");
 
@@ -275,8 +305,8 @@
                 
                 NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
                 [defaults setObject:[NSString stringWithFormat:@"%@", addressString] forKey:@"UserAddressString"];
-                [defaults synchronize];
-
+                [defaults setDouble:placemark.location.coordinate.latitude forKey:@"placemarkLatitude"];
+                [defaults setDouble:placemark.location.coordinate.longitude forKey:@"placemarkLongitude"];
                 
                 [defaults synchronize];
                 

@@ -17,8 +17,9 @@
     //NSMutableString *pizzaDescription;
 }
 
-@property (nonatomic,retain) UIButton *confirmButton;
-@property (nonatomic,retain) UILabel *priceLabel;
+@property (nonatomic,retain) IBOutlet UIButton *confirmButton;
+@property (nonatomic,retain) IBOutlet UILabel *priceLabel;
+@property (nonatomic,retain) IBOutlet UIBarButtonItem *faqButton;
 
 @property (nonatomic, retain) IBOutlet UIImageView *waitingGIF;
 @property (nonatomic, retain) IBOutlet UIImageView *waitingScreen;
@@ -27,6 +28,6 @@
 
 //@property(nonatomic, retain) IBOutlet UIButton *clickMeButton;
 
-//-(IBAction)goToPizzaPage:(id)sender;
+-(IBAction)popFaqModal:(id)sender;
 
 @end

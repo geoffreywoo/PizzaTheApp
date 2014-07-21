@@ -70,6 +70,7 @@
 }
 
 - (void) checkPrices {
+    self.confirmButton.enabled = NO;
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     NSString *stringForPrices = API_CHECK_PRICES_ZIP;
     
@@ -92,9 +93,10 @@
         [pricingStore synchronize];
         
         [self displayPrice];
-        
+        self.confirmButton.enabled = YES;
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error.description);
+        self.confirmButton.enabled = YES;
     }];
 }
 
@@ -179,9 +181,9 @@
         userAddress = @"No address set";
     } else {
         if ([[NSUserDefaults standardUserDefaults] objectForKey:@"UserAddressString2"] == nil || [[[NSUserDefaults standardUserDefaults] objectForKey:@"UserAddressString2"] isEqualToString:@""]) {
-            userAddress = [NSString stringWithFormat:@"%@, %@ %@", [[[[NSUserDefaults standardUserDefaults] objectForKey:@"UserAddressString"] componentsSeparatedByString:@","] objectAtIndex:0], [[[[NSUserDefaults standardUserDefaults] objectForKey:@"UserAddressString"] componentsSeparatedByString:@","] objectAtIndex:1], [[NSUserDefaults standardUserDefaults] objectForKey:@"zipCode"]];
+            userAddress = [NSString stringWithFormat:@"%@\n%@, %@ %@", [[[[NSUserDefaults standardUserDefaults] objectForKey:@"UserAddressString"] componentsSeparatedByString:@", "] objectAtIndex:0], [[[[NSUserDefaults standardUserDefaults] objectForKey:@"UserAddressString"] componentsSeparatedByString:@", "] objectAtIndex:1], [[[[NSUserDefaults standardUserDefaults] objectForKey:@"UserAddressString"] componentsSeparatedByString:@", "] objectAtIndex:2], [[NSUserDefaults standardUserDefaults] objectForKey:@"zipCode"]];
         } else {
-            userAddress = [NSString stringWithFormat:@"%@ #%@, %@ %@", [[[[NSUserDefaults standardUserDefaults] objectForKey:@"UserAddressString"] componentsSeparatedByString:@","] objectAtIndex:0], [[NSUserDefaults standardUserDefaults] objectForKey:@"UserAddressString2"], [[[[NSUserDefaults standardUserDefaults] objectForKey:@"UserAddressString"] componentsSeparatedByString:@","] objectAtIndex:1], [[NSUserDefaults standardUserDefaults] objectForKey:@"zipCode"]];
+            userAddress = [NSString stringWithFormat:@"%@ #%@\n%@, %@ %@", [[[[NSUserDefaults standardUserDefaults] objectForKey:@"UserAddressString"] componentsSeparatedByString:@", "] objectAtIndex:0], [[NSUserDefaults standardUserDefaults] objectForKey:@"UserAddressString2"], [[[[NSUserDefaults standardUserDefaults] objectForKey:@"UserAddressString"] componentsSeparatedByString:@", "] objectAtIndex:1], [[[[NSUserDefaults standardUserDefaults] objectForKey:@"UserAddressString"] componentsSeparatedByString:@", "] objectAtIndex:2],[[NSUserDefaults standardUserDefaults] objectForKey:@"zipCode"]];
         }
         
         NSLog(@"%@",[[NSUserDefaults standardUserDefaults] objectForKey:@"UserAddressString"]);
@@ -192,7 +194,7 @@
     UIButton *deliveryPage = [UIButton buttonWithType:UIButtonTypeCustom ];
     deliveryPage.frame = CGRectMake(-1, 115, screenRect.size.width+2, 73.5  );
     [deliveryPage setTitle:[NSString stringWithFormat:@"%@",userAddress] forState:UIControlStateNormal];
-    deliveryPage.titleLabel.font = [UIFont fontWithName:@"Verlag-Bold" size:18];
+    deliveryPage.titleLabel.font = [UIFont fontWithName:@"Verlag-Black" size:18];
     deliveryPage.backgroundColor = [UIColor whiteColor];
     deliveryPage.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
     [deliveryPage setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
@@ -227,7 +229,7 @@
     [goToPizzaPage addTarget:self action:@selector(goToPizzaPage:) forControlEvents:UIControlEventTouchUpInside];
     [goToPizzaPage setContentHorizontalAlignment:UIControlContentHorizontalAlignmentLeft];
     goToPizzaPage.titleLabel.lineBreakMode = NSLineBreakByWordWrapping;
-    [goToPizzaPage.titleLabel setFont:[UIFont fontWithName:@"Verlag-Bold" size:15]];
+    [goToPizzaPage.titleLabel setFont:[UIFont fontWithName:@"Verlag-Black" size:15]];
     [goToPizzaPage setTitleEdgeInsets:UIEdgeInsetsMake(-5.0f, 15.0f, 0.0f, screenRect.size.width/3)];
     
     NSMutableString *pizzaDescription = [NSMutableString stringWithFormat:@"Large"];
@@ -293,8 +295,6 @@
 }
 
 - (void) placeConfirmButton {
-    self.confirmButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    self.confirmButton.frame = CGRectMake(0,  screenRect.size.height-50, screenRect.size.width, 50);
     [self.confirmButton setTitle:[NSString stringWithFormat:@"PLACE ORDER"] forState:UIControlStateNormal];
     self.confirmButton.titleLabel.font = [UIFont fontWithName:@"Verlag-Black" size:16];
     self.confirmButton.layer.cornerRadius = 0;
@@ -302,13 +302,8 @@
     [[self.confirmButton layer] setMasksToBounds:YES];
     [[self.confirmButton layer] setBorderWidth:0.0f];
     [self.confirmButton addTarget:self action:@selector(placeOrder:) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:self.confirmButton];
     
-    self.priceLabel = [[UILabel alloc] initWithFrame:CGRectMake(15, 4, 40, 40)];
-    // [priceLabel setBackgroundColor:[UIColor blueColor]];
-    self.priceLabel.textColor = [UIColor colorWithRed:255.0f green:255.0f blue:255.0f alpha:0.75f];
     self.priceLabel.font = [UIFont fontWithName:@"Verlag-Black" size:20];
-    [self.confirmButton addSubview:self.priceLabel];
 }
 
 - (void) viewWillAppear:(BOOL)animated
@@ -332,6 +327,12 @@
     Mixpanel *mixpanel = [Mixpanel sharedInstance];
     [mixpanel track:@"mainViewController"];
     
+    /*
+     [self.faqButton setTitleTextAttributes:@{
+                                         NSFontAttributeName: [UIFont fontWithName:@"Verlag-Bold" size:18.0],
+                                         NSForegroundColorAttributeName: pizzaRedColor
+                                         } forState:UIControlStateNormal];
+    */
     [self settingsButton];
     
     [self yourPizzaLabel];
@@ -471,7 +472,7 @@
                 //do something?
                 break;
             case 1: //"Yes" pressed
-                [self getRestaurantIDs];
+                [self checkZip];
                 break;
         }
     } else if (alertView.tag == 2) {
@@ -488,25 +489,29 @@
     return (NSString *)CFBridgingRelease(CFURLCreateStringByAddingPercentEscapes(NULL, str, NULL, charset, encoding));
 }
 
-- (void)getRestaurantIDs {
-    NSLog(@"getting restaurant ids");
-    NSString *BaseURL = BASE_URL_RESTAURANTS;
-    /*NSString *address1 = @"341 Jersey Street";
-    NSString *address2 = @"";
-    NSString *zip = @"94114";
-    */
+- (void) checkZip {
     NSUserDefaults *orderInfo = [NSUserDefaults standardUserDefaults];
-    NSLog(@"Customer ID: %@", [orderInfo objectForKey:@"customerID"]);
-    
-    NSString *address1 = [[[orderInfo objectForKey:@"UserAddressString"] componentsSeparatedByString:@","] objectAtIndex:0];
-    NSString *address2 = ([orderInfo objectForKey:@"UserAddressString2"] != nil) ? [orderInfo objectForKey:@"UserAddressString2"] : @"";
-
     NSString *zip = [orderInfo objectForKey:@"zipCode"];
     if (!zip) {
         NSLog(@"no zip");
         [self GoToMapSearchPage:nil];
         return;
     }
+    
+    [self getRestaurantIDs];
+}
+
+- (void)getRestaurantIDs {
+    NSLog(@"getting restaurant ids");
+    NSString *BaseURL = BASE_URL_RESTAURANTS;
+
+    NSUserDefaults *orderInfo = [NSUserDefaults standardUserDefaults];
+    NSLog(@"Customer ID: %@", [orderInfo objectForKey:@"customerID"]);
+    
+    NSString *zip = [orderInfo objectForKey:@"zipCode"];
+    NSString *address1 = [[[orderInfo objectForKey:@"UserAddressString"] componentsSeparatedByString:@","] objectAtIndex:0];
+    NSString *address2 = ([orderInfo objectForKey:@"UserAddressString2"] != nil) ? [orderInfo objectForKey:@"UserAddressString2"] : @"";
+
     if (!address1) {
         NSLog(@"no address 1");
         [self GoToMapSearchPage:nil];
@@ -578,33 +583,30 @@
     NSLog(@"URL ENCODED GET REQUEST STRING: %@", urlEncodedString);
 
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    [manager.requestSerializer setTimeoutInterval:25];
     [manager GET: urlEncodedString parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSLog(@"JSON: %@", responseObject);
         //CREATING
-         
-         NSArray *restaurants = [responseObject objectForKey:@"restaurants"];
-         NSMutableArray *restaurantIDArray = [[NSMutableArray alloc]init];
-         
-         for(int i=0; i< restaurants.count; i++){
-             NSDictionary *document = [restaurants objectAtIndex:i];
-             NSString *restaurantID = [document objectForKey:@"restaurantid"];
-             [restaurantIDArray addObject: restaurantID];
-         }
-         NSLog(@"%@",restaurantIDArray);
-         
-         NSUserDefaults *restaurantIDStore = [NSUserDefaults standardUserDefaults];
-         [restaurantIDStore setObject:restaurantIDArray forKey:@"restaurantIDs"];
-         [restaurantIDStore synchronize];
-         
-         [self submitOrderToServer];
+        NSArray *restaurants = [responseObject objectForKey:@"restaurants"];
+        NSMutableArray *restaurantIDArray = [[NSMutableArray alloc]init];
+        
+        for(int i=0; i< restaurants.count; i++){
+            NSDictionary *document = [restaurants objectAtIndex:i];
+            NSString *restaurantID = [document objectForKey:@"restaurantid"];
+            [restaurantIDArray addObject: restaurantID];
+        }
+        NSLog(@"%@",restaurantIDArray);
+        NSUserDefaults *restaurantIDStore = [NSUserDefaults standardUserDefaults];
+        [restaurantIDStore setObject:restaurantIDArray forKey:@"restaurantIDs"];
+        [restaurantIDStore synchronize];
+        
+        [self submitOrderToServer];
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         // [MBProgressHUD hideHUDForView:self.view animated:YES];
         [self hideWaitingGif];
         NSLog(@"Error Restaurants: %@", error.description);
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Oops!"
-                                                        message:@"We're not in your area or are closed!"
+                                                        message:@"You won't be charged. We weren't able to fetch any pizzerias near you=!"
                                                        delegate:self
                                               cancelButtonTitle:@"Ok, thanks!"
                                               otherButtonTitles: nil];
@@ -690,7 +692,7 @@
                 //[MBProgressHUD hideHUDForView:self.view animated:YES];
                 [self hideWaitingGif];
                 UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Oops!"
-                                                                message:@"We're not in your area or are closed!"
+                                                                message:@"You won't be charged. Something went wrong with the order! /api/orders OK"
                                                                delegate:self
                                                       cancelButtonTitle:@"Ok, thanks!"
                                                       otherButtonTitles: nil];
@@ -703,7 +705,7 @@
             //[MBProgressHUD hideHUDForView:self.view animated:YES];
             [self hideWaitingGif];
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Oops!"
-                                                            message:@"We're not in your area or are closed!"
+                                                            message:@"You won't be charged. All pizzerias nearby are closed! error with /api/orders"
                                                            delegate:self
                                                   cancelButtonTitle:@"Ok, thanks!"
                                                   otherButtonTitles: nil];
@@ -731,5 +733,16 @@
     UIViewController *sec=[[SPGooglePlacesAutocompleteDemoViewController alloc] initWithNibName:@"SPGooglePlacesAutocompleteDemoViewController" bundle:nil];
     [self.navigationController pushViewController:sec animated:YES];
 }
+
+-(IBAction)popFaqModal:(id)sender {
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"How does PizzaTheApp work?"
+                                                    message:@"We're powered by our curated network of our favorite local pizzerias. We dynamically find the best-rated pizza with the shortest delivery time available right now and get that delivered to you.\n\nAll tip, tax, and delivery fee included."
+                                                   delegate:self
+                                          cancelButtonTitle:@"🍕🍕🍕🍕🍕"
+                                          otherButtonTitles: nil];
+    alert.tag = 123;
+    [alert show];
+}
+
 @end
 

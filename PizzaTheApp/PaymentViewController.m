@@ -349,7 +349,7 @@ bool _cardValid;
 
 - (void) addStripeView {
     CGRect screenRect = [[UIScreen mainScreen] bounds];
-    self.stripeView = [[STPView alloc] initWithFrame:CGRectMake(13,215,screenRect.size.width-10,55)
+    self.stripeView = [[STPView alloc] initWithFrame:CGRectMake(13,90,screenRect.size.width-10,55)
                                               andKey:STRIPE_KEY];
     self.stripeView.delegate = self;
     self.stripeView.tag = 99;
@@ -370,6 +370,8 @@ bool _cardValid;
     
     Mixpanel *mixpanel = [Mixpanel sharedInstance];
     [mixpanel track:@"paymentViewController"];
+    
+    self.clearButton.titleLabel.font = [UIFont fontWithName:@"Verlag-Bold" size:17];
     
     // IF CUSTOMER ID IS SAVED, CHANGE THE DISPLAY
     if([[NSUserDefaults standardUserDefaults] objectForKey:@"customerID"]!=nil){
