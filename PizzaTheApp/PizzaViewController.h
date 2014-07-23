@@ -26,7 +26,14 @@
     BOOL animating;
 }
 
-@property IBOutlet UIButton* pizzaMain;
+@property (nonatomic, retain) IBOutlet UIButton* pizzaMain;
+
+
+@property (nonatomic, retain) IBOutlet UIButton* pepperoni;
+@property (nonatomic, retain) IBOutlet UIButton* sausage;
+@property (nonatomic, retain) IBOutlet UIButton* mushrooms;
+@property (nonatomic, retain) IBOutlet UIButton* peppers;
+@property (nonatomic, retain) IBOutlet UIButton* olive;
 
 - (void)playPizzaSong:(id)sender;
 

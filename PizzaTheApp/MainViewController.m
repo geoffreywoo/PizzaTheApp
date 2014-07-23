@@ -17,6 +17,7 @@
 #import "AFNetworking.h"
 #import "AnimatedGif.h"
 #import "UIImageView+AnimatedGif.h"
+#import <MessageUI/MessageUI.h>
 
 //#import <Crashlytics/Crashlytics.h>
 
@@ -66,7 +67,54 @@
         }
     }
     NSLog(@"%d", self.price);
-    self.priceLabel.text = [NSString stringWithFormat:@"$%d",self.price];
+    double finalPrice = self.price / 100.0;
+    self.priceLabel.text = [NSString stringWithFormat:@"$%.2f",finalPrice];
+}
+
+- (void)popEmailModal:(UIButton*)sender {
+    if ([MFMailComposeViewController canSendMail]) {
+        MFMailComposeViewController *composeViewController = [[MFMailComposeViewController alloc] initWithNibName:nil bundle:nil];
+        [composeViewController setMailComposeDelegate:self];
+        [composeViewController setToRecipients:@[@"new_city@pizzatheapp.com"]];
+        [composeViewController setSubject:@"I want pizza in my area!"];
+        [composeViewController setMessageBody:[NSString stringWithFormat:@"My zipcode is %@.",[[NSUserDefaults standardUserDefaults] objectForKey:@"zipCode"]] isHTML:NO];
+        [self presentViewController:composeViewController animated:YES completion:nil];
+    }
+}
+
+-(void)mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error {
+    
+    if (error) {
+        
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"error"
+                              
+                                                        message:[NSString stringWithFormat:@"error %@", [error description]]
+                              
+                                                       delegate:nil cancelButtonTitle:@"dismiss" otherButtonTitles:nil, nil];
+        
+        [alert show];
+        [self dismissViewControllerAnimated:NO completion:nil];
+        
+    }
+    
+    else {
+        [self dismissViewControllerAnimated:NO completion:nil];
+    }
+    
+}
+
+- (void) setNotSupportedConfirmButton {
+    [self.confirmButton setTitle:@"I WANT PIZZA(THEAPP)" forState:UIControlStateNormal];
+    [self.confirmButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
+    [self.confirmButton addTarget:self action:@selector(popEmailModal:) forControlEvents:UIControlEventTouchUpInside];
+    self.priceLabel.hidden = YES;
+}
+
+- (void) setSupportedConfirmButton {
+    [self.confirmButton setTitle:@"PLACE ORDER" forState:UIControlStateNormal];
+    [self.confirmButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
+    [self.confirmButton addTarget:self action:@selector(placeOrder:) forControlEvents:UIControlEventTouchUpInside];
+    self.priceLabel.hidden = NO;
 }
 
 - (void) checkPrices {
@@ -76,11 +124,12 @@
     
     [manager GET:[NSString stringWithFormat:@"%@%@",stringForPrices,[[NSUserDefaults standardUserDefaults] objectForKey:@"zipCode"]] parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSLog(@"JSON: %@", responseObject);
+        NSLog(@"STATUS CODE: %@",[responseObject objectForKey:@"status code"]);
         
-        int toppingPrice = [[responseObject objectForKey:@"TOPPING_PRICE_CENTS"] intValue]/100;
-        int tipPrice = [[responseObject objectForKey:@"TIP_CENTS"] intValue]/100;
-        int taxAndDeliveryPrice = [[responseObject objectForKey:@"TAX_AND_DELIVERY_CENTS"] intValue]/100;
-        int basePrice = [[responseObject objectForKey:@"BASE_PRICE_CENTS"] intValue]/100;
+        int toppingPrice = [[responseObject objectForKey:@"TOPPING_PRICE_CENTS"] intValue];
+        int tipPrice = [[responseObject objectForKey:@"TIP_CENTS"] intValue];
+        int taxAndDeliveryPrice = [[responseObject objectForKey:@"TAX_AND_DELIVERY_CENTS"] intValue];
+        int basePrice = [[responseObject objectForKey:@"BASE_PRICE_CENTS"] intValue];
         NSLog(@"Topping Price %d", toppingPrice);
         NSLog(@"tip Price %d", tipPrice);
         NSLog(@"Base Price %d", basePrice);
@@ -94,43 +143,17 @@
         
         [self displayPrice];
         self.confirmButton.enabled = YES;
+        [self setSupportedConfirmButton];
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error.description);
-        self.confirmButton.enabled = YES;
-    }];
-}
-
-- (void) initPrices {
-    if ([[NSUserDefaults standardUserDefaults] objectForKey:@"zipCode"]) {
-        [self checkPrices];
-    } else {
-        AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-        NSString *stringForPrices = API_CONFIG;
-        [manager GET:[NSString stringWithFormat:@"%@",stringForPrices] parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
-            NSLog(@"JSON: %@", responseObject);
-        
-            int toppingPrice = [[responseObject objectForKey:@"TOPPING_PRICE_CENTS"] intValue]/100;
-            int tipPrice = [[responseObject objectForKey:@"TIP_CENTS"] intValue]/100;
-            int taxAndDeliveryPrice = [[responseObject objectForKey:@"TAX_AND_DELIVERY_CENTS"] intValue]/100;
-            int basePrice = [[responseObject objectForKey:@"BASE_PRICE_CENTS"] intValue]/100;
-            NSLog(@"Topping Price %d", toppingPrice);
-            NSLog(@"tip Price %d", tipPrice);
-            NSLog(@"Base Price %d", basePrice);
-        
-            NSUserDefaults *pricingStore = [NSUserDefaults standardUserDefaults];
-            [pricingStore setInteger:toppingPrice forKey:@"toppingPrice"];
-            [pricingStore setInteger:tipPrice forKey:@"tipPrice"];
-            [pricingStore setInteger:taxAndDeliveryPrice forKey:@"taxAndDeliveryPrice"];
-            [pricingStore setInteger:basePrice forKey:@"basePrice"];
-            [pricingStore synchronize];
+        if ([operation.response statusCode] == 404) {
+            [self setNotSupportedConfirmButton];
+            self.confirmButton.enabled = YES;
             
-            [self displayPrice];
-        
-        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-            NSLog(@"Error: %@", error.description);
-        }];
-    }
-    
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Sorry!" message:[NSString stringWithFormat:@"We're not delivering in your area just yet 🙆"] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+            [alert show];
+        }
+    }];
 }
 
 - (void) fetchCustomerData {
@@ -194,7 +217,7 @@
     UIButton *deliveryPage = [UIButton buttonWithType:UIButtonTypeCustom ];
     deliveryPage.frame = CGRectMake(-1, 115, screenRect.size.width+2, 73.5  );
     [deliveryPage setTitle:[NSString stringWithFormat:@"%@",userAddress] forState:UIControlStateNormal];
-    deliveryPage.titleLabel.font = [UIFont fontWithName:@"Verlag-Black" size:18];
+    deliveryPage.titleLabel.font = [UIFont fontWithName:@"Verlag-Book" size:18];
     deliveryPage.backgroundColor = [UIColor whiteColor];
     deliveryPage.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
     [deliveryPage setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
@@ -229,7 +252,7 @@
     [goToPizzaPage addTarget:self action:@selector(goToPizzaPage:) forControlEvents:UIControlEventTouchUpInside];
     [goToPizzaPage setContentHorizontalAlignment:UIControlContentHorizontalAlignmentLeft];
     goToPizzaPage.titleLabel.lineBreakMode = NSLineBreakByWordWrapping;
-    [goToPizzaPage.titleLabel setFont:[UIFont fontWithName:@"Verlag-Black" size:15]];
+    [goToPizzaPage.titleLabel setFont:[UIFont fontWithName:@"Verlag-Book" size:15]];
     [goToPizzaPage setTitleEdgeInsets:UIEdgeInsetsMake(-5.0f, 15.0f, 0.0f, screenRect.size.width/3)];
     
     NSMutableString *pizzaDescription = [NSMutableString stringWithFormat:@"Large"];
@@ -317,38 +340,25 @@
 
     if ([[NSUserDefaults standardUserDefaults] boolForKey:@"HasLaunchedOnce"]){
         [self.navigationItem setHidesBackButton:YES];
+        Mixpanel *mixpanel = [Mixpanel sharedInstance];
+        [mixpanel track:@"mainViewController"];
+        
+        [self settingsButton];
+        
+        [self yourPizzaLabel];
+        
+        [self deliveryLabel];
+        
+        [self placeConfirmButton];
+        [self checkPrices];
+        [self displayPrice];
+        [self setupWaitingGif];
     } else {
         [self.navigationItem setHidesBackButton:YES];
         UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main_iPhone" bundle:nil];
         PizzaViewController *sec= [storyboard instantiateViewControllerWithIdentifier:@"PizzaViewController"];
         [self.navigationController pushViewController:sec animated:YES];
     }
-    
-    Mixpanel *mixpanel = [Mixpanel sharedInstance];
-    [mixpanel track:@"mainViewController"];
-    
-    /*
-     [self.faqButton setTitleTextAttributes:@{
-                                         NSFontAttributeName: [UIFont fontWithName:@"Verlag-Bold" size:18.0],
-                                         NSForegroundColorAttributeName: pizzaRedColor
-                                         } forState:UIControlStateNormal];
-    */
-    [self settingsButton];
-    
-    [self yourPizzaLabel];
-    
-    [self deliveryLabel];
-    
-    [self placeConfirmButton];
-    
-    [self checkPrices];
-    
-    [self setupWaitingGif];
-
-   // UIImageView * newImageView = [[UIImageView alloc] initWithFrame:CGRectMake(10, 20, 300, 200)];
-
-    //[self.view bringSubviewToFront:self.waitingScreen];
-    //[self.view addSubview:newImageView];
 }
 
 - (void) setupWaitingGif {
@@ -403,11 +413,6 @@
             
     }
     
-
-    
-    
-
-    
     [self.navigationController.view addSubview:self.waitingScreen];
     
     
@@ -426,7 +431,6 @@
 
 - (void) viewDidLoad {
     [super viewDidLoad];
-    [self initPrices];
     [self fetchCustomerData];
 }
 

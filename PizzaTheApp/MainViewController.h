@@ -7,8 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <MessageUI/MessageUI.h>
 
-@interface MainViewController : UIViewController{
+@interface MainViewController : UIViewController <MFMailComposeViewControllerDelegate> {
     CGRect screenRect;
     NSMutableArray *chosenToppings;
     UIImageView *pizzaImage;
