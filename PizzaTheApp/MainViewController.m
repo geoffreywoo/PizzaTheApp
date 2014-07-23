@@ -735,8 +735,8 @@
 }
 
 -(IBAction)popFaqModal:(id)sender {
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"How does PizzaTheApp work?"
-                                                    message:@"We're powered by our curated network of our favorite local pizzerias. We dynamically find the best-rated pizza with the shortest delivery time available right now and get that delivered to you.\n\nAll tip, tax, and delivery fee included."
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil
+                                                    message:@"🍕HOW?🍕\nTap a button, get a pizza. Tip, tax, and delivery included.\n\n🍕WHAT?🍕\nThin crust, red sauce. \n16\" serves 2-3 people.\n\n🍕WHO?🍕\nWe send your order to our highest rated pizzeria that's open near you. All pizzerias in our network have at least 3 out of 5 stars in online reviews. And no \"fast food\" pizza chains - local shops only!\n\n🍕WHEN?🍕\nASAP! We work with the best local shops, the places that have reputations for fast delivery and yummy pizza.\n\n🍕I HAVE MORE QUESTIONS.🍕\nEmail us! pepperoni@pizzatheapp.com"
                                                    delegate:self
                                           cancelButtonTitle:@"🍕🍕🍕🍕🍕"
                                           otherButtonTitles: nil];
