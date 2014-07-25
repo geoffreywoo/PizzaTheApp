@@ -110,6 +110,10 @@
 		60A6AA061964B247009D99AA /* settings2-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 60A6AA041964B247009D99AA /* settings2-icon.png */; };
 		60A6AA071964B247009D99AA /* settings2-icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 60A6AA051964B247009D99AA /* settings2-icon@2x.png */; };
 		60AAFDFE197F9CB7009F9C5E /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 60AAFDFD197F9CB7009F9C5E /* MessageUI.framework */; };
+		60AAFE01197FA88B009F9C5E /* menu-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 60AAFDFF197FA88B009F9C5E /* menu-icon.png */; };
+		60AAFE02197FA88B009F9C5E /* menu-icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 60AAFE00197FA88B009F9C5E /* menu-icon@2x.png */; };
+		60AAFE0519823C99009F9C5E /* pizza-logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 60AAFE0319823C99009F9C5E /* pizza-logo.png */; };
+		60AAFE0619823C99009F9C5E /* pizza-logo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 60AAFE0419823C99009F9C5E /* pizza-logo@2x.png */; };
 		8F7398F8477B40E1A796B950 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A764387439F404E94B2916A /* libPods.a */; };
 /* End PBXBuildFile section */
 
@@ -248,6 +252,10 @@
 		60A6AA041964B247009D99AA /* settings2-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "settings2-icon.png"; sourceTree = "<group>"; };
 		60A6AA051964B247009D99AA /* settings2-icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "settings2-icon@2x.png"; sourceTree = "<group>"; };
 		60AAFDFD197F9CB7009F9C5E /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
+		60AAFDFF197FA88B009F9C5E /* menu-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "menu-icon.png"; sourceTree = "<group>"; };
+		60AAFE00197FA88B009F9C5E /* menu-icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "menu-icon@2x.png"; sourceTree = "<group>"; };
+		60AAFE0319823C99009F9C5E /* pizza-logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "pizza-logo.png"; sourceTree = "<group>"; };
+		60AAFE0419823C99009F9C5E /* pizza-logo@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "pizza-logo@2x.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -514,6 +522,10 @@
 		60A6A9F719632F5D009D99AA /* Icons */ = {
 			isa = PBXGroup;
 			children = (
+				60AAFE0319823C99009F9C5E /* pizza-logo.png */,
+				60AAFE0419823C99009F9C5E /* pizza-logo@2x.png */,
+				60AAFDFF197FA88B009F9C5E /* menu-icon.png */,
+				60AAFE00197FA88B009F9C5E /* menu-icon@2x.png */,
 				60A6AA041964B247009D99AA /* settings2-icon.png */,
 				60A6AA051964B247009D99AA /* settings2-icon@2x.png */,
 				60A6A9821960E308009D99AA /* LaunchImage-568h@2x.png */,
@@ -628,6 +640,7 @@
 				60A6A9E019622695009D99AA /* Verlag XLight.otf in Resources */,
 				60A6AA071964B247009D99AA /* settings2-icon@2x.png in Resources */,
 				600A93991977473900B4E5A0 /* blackOverlay.png in Resources */,
+				60AAFE01197FA88B009F9C5E /* menu-icon.png in Resources */,
 				60A6AA0119632F96009D99AA /* sausage-bg@2x.png in Resources */,
 				60A6A9E119622695009D99AA /* Verlag-Book.otf in Resources */,
 				60A6A9CD196224DE009D99AA /* header-logo.png in Resources */,
@@ -671,6 +684,7 @@
 				60A6A9A51960E31F009D99AA /* pizza.png in Resources */,
 				60A6A9891960E308009D99AA /* LaunchImage-568h@2x.png in Resources */,
 				60A6A9C8196224DE009D99AA /* 58x58.png in Resources */,
+				60AAFE0619823C99009F9C5E /* pizza-logo@2x.png in Resources */,
 				60A6AA0019632F96009D99AA /* pepperoni-bg@2x.png in Resources */,
 				60A6A9981960E314009D99AA /* navbar.png in Resources */,
 				60A6A9F019632D6A009D99AA /* olivesGuitar.aif in Resources */,
@@ -679,9 +693,11 @@
 				60A6A9F619632D6A009D99AA /* sausageGuitar.aif in Resources */,
 				607F55A71960DE3A00926E1A /* InfoPlist.strings in Resources */,
 				60A6A98A1960E308009D99AA /* LaunchImage.png in Resources */,
+				60AAFE02197FA88B009F9C5E /* menu-icon@2x.png in Resources */,
 				60A6A9A81960E328009D99AA /* sausage.png in Resources */,
 				60A6A9CA196224DE009D99AA /* 120x120.png in Resources */,
 				60A6A9961960E314009D99AA /* mushrooms.png in Resources */,
+				60AAFE0519823C99009F9C5E /* pizza-logo.png in Resources */,
 				60A6A9CB196224DE009D99AA /* emptyPlate.png in Resources */,
 				60A6A9FF19632F96009D99AA /* mushrooms-bg@2x.png in Resources */,
 				60A6A9A41960E31F009D99AA /* peppersnew.png in Resources */,
@@ -888,8 +904,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "PizzaTheApp/PizzaTheApp-Prefix.pch";
 				INFOPLIST_FILE = "PizzaTheApp/PizzaTheApp-Info.plist";
@@ -907,8 +923,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "PizzaTheApp/PizzaTheApp-Prefix.pch";
 				INFOPLIST_FILE = "PizzaTheApp/PizzaTheApp-Info.plist";

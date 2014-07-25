@@ -21,22 +21,21 @@
 
 //#import <Crashlytics/Crashlytics.h>
 
-
+/*
 #define STRIPE_KEY @"pk_test_9wPOvSKQ8o5EsuXDWUIBjzlQ"
 #define API_CONFIG @"https://pizzatheapp-staging.herokuapp.com/api/config"
 #define API_ORDERS @"https://pizzatheapp-staging.herokuapp.com/api/orders"
 #define API_CUSTOMERS @"https://pizzatheapp-staging.herokuapp.com/api/customers/"
 #define API_CHECK_PRICES_ZIP @"https://pizzatheapp-staging.herokuapp.com/api/zipCodePrice/"
 #define BASE_URL_RESTAURANTS @"https://pizzatheapp-staging.herokuapp.com/api/closest-restaurants?"
+*/
 
-/*
 #define STRIPE_KEY @"pk_live_5l59z07mDTFiUSSxp9UGBYxr"
 #define API_CONFIG @"https://pizzatheapp.herokuapp.com/api/config"
 #define API_ORDERS @"https://pizzatheapp.herokuapp.com/api/orders"
 #define API_CUSTOMERS @"https://pizzatheapp.herokuapp.com/api/customers/"
 #define API_CHECK_PRICES_ZIP @"https://pizzatheapp.herokuapp.com/api/zipCodePrice/"
 #define BASE_URL_RESTAURANTS @"https://pizzatheapp.herokuapp.com/api/closest-restaurants?"
-*/
 
 #define RGB(r,g,b) [UIColor colorWithRed:r/255.0f green:g/255.0f blue:b/255.0f alpha:1.0f]
 #define pizzaRedColor RGB(195,36,43)
@@ -120,9 +119,8 @@
 - (void) checkPrices {
     self.confirmButton.enabled = NO;
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    NSString *stringForPrices = API_CHECK_PRICES_ZIP;
     
-    [manager GET:[NSString stringWithFormat:@"%@%@",stringForPrices,[[NSUserDefaults standardUserDefaults] objectForKey:@"zipCode"]] parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [manager GET:[NSString stringWithFormat:@"%@%@",API_CHECK_PRICES_ZIP,[[NSUserDefaults standardUserDefaults] objectForKey:@"zipCode"]] parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSLog(@"JSON: %@", responseObject);
         NSLog(@"STATUS CODE: %@",[responseObject objectForKey:@"status code"]);
         
@@ -181,7 +179,7 @@
 
 - (void) settingsButton {
     NSLog(@"settingsButton");
-    UIImage *faceImage = [UIImage imageNamed:@"settings2-icon.png"];
+    UIImage *faceImage = [UIImage imageNamed:@"menu-icon.png"];
     UIButton *face = [UIButton buttonWithType:UIButtonTypeCustom];
     face.bounds = CGRectMake( 0, 0, 30, 30);//set bound as per you want
     [face addTarget:self action:@selector(goToPaymentPage:) forControlEvents:UIControlEventTouchUpInside];
@@ -333,7 +331,7 @@
 {
     [super viewWillAppear:animated];
     
-    UIImage *titleImage = [UIImage imageNamed:@"header-logo.png"];
+    UIImage *titleImage = [UIImage imageNamed:@"pizza-logo.png"];
     self.navigationItem.titleView = [[UIImageView alloc] initWithImage:titleImage];
     
     [self.view setBackgroundColor:backgroundGrey];
@@ -610,7 +608,7 @@
         [self hideWaitingGif];
         NSLog(@"Error Restaurants: %@", error.description);
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Oops!"
-                                                        message:@"You won't be charged. We weren't able to fetch any pizzerias near you=!"
+                                                        message:@"We weren't able to find any pizzerias near you! You haven't been charged. "
                                                        delegate:self
                                               cancelButtonTitle:@"Ok, thanks!"
                                               otherButtonTitles: nil];
@@ -662,54 +660,23 @@
                                  @"delivery_apartment": streetAddress2,
                                  @"delivery_zip": zipCode,
                                  @"restaurantIds": restaurantIDList,
-                                 @"toppings": formattedToppingsForSubmission};
+                                 @"toppings": formattedToppingsForSubmission,
+                                 @"runAsync": @"true"};
         
         
         NSLog(@"params: %@", params);
         [manager POST:API_ORDERS parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
             NSLog(@"Customer ID: %@", [orderInfo objectForKey:@"customerID"]);
             NSLog(@"Response: %@", responseObject);
-            
-            if ([responseObject objectForKey:@"error"]==nil) {
-                [self hideWaitingGif];
-                
-                MJDetailViewController *detailViewController = [[MJDetailViewController alloc] initWithNibName:@"MJDetailViewController" bundle:nil];
-                [self presentPopupViewController:detailViewController animationType:MJPopupViewAnimationSlideBottomBottom];
-                
-                NSNumber *nsprice = [NSNumber numberWithInt:self.price];
-                Mixpanel *mixpanel = [Mixpanel sharedInstance];
-                [mixpanel.people trackCharge:nsprice];
-                //[MBProgressHUD hideHUDForView:self.view animated:YES];
-    
-                [mixpanel.people increment:@{
-                                             @"dollars spent":nsprice,
-                                             @"pizzas ordered":@1
-                                             }];
-                
-                NSString *pizzaToppings = [formattedToppingsForSubmission componentsJoinedByString: @","];
-                [mixpanel track:@"Pizza Toppings" properties:@{
-                                                              @"toppings":pizzaToppings
-                                                              }];
-                
-                
-            } else {
-                //[MBProgressHUD hideHUDForView:self.view animated:YES];
-                [self hideWaitingGif];
-                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Oops!"
-                                                                message:@"You won't be charged. Something went wrong with the order! /api/orders OK"
-                                                               delegate:self
-                                                      cancelButtonTitle:@"Ok, thanks!"
-                                                      otherButtonTitles: nil];
-                [alert show];
-            }
-            
+            self.order_id = [responseObject objectForKey:@"_id"];
+            [self startPollingForOrderStatus:self.order_id];
             
         } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
             NSLog(@"Error: %@", error.description);
             //[MBProgressHUD hideHUDForView:self.view animated:YES];
             [self hideWaitingGif];
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Oops!"
-                                                            message:@"You won't be charged. All pizzerias nearby are closed! error with /api/orders"
+                                                            message:@"Looks like our pizzerias are unresponsive! Try again. You have not been charged."
                                                            delegate:self
                                                   cancelButtonTitle:@"Ok, thanks!"
                                                   otherButtonTitles: nil];
@@ -718,6 +685,63 @@
         }];
     }
     
+}
+
+- (void) ping {
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    manager.responseSerializer = [AFJSONResponseSerializer serializerWithReadingOptions:NSJSONReadingAllowFragments];
+    [manager GET:[NSString stringWithFormat:@"%@/%@",API_ORDERS, self.order_id] parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+
+        NSLog(@"Order ID: %@", self.order_id);
+        NSLog(@"Response: %@", responseObject);
+
+        if ([[responseObject objectForKey:@"status"] isEqualToString:@"complete"]) {
+            [self hideWaitingGif];
+            
+            MJDetailViewController *detailViewController = [[MJDetailViewController alloc] initWithNibName:@"MJDetailViewController" bundle:nil];
+            [self presentPopupViewController:detailViewController animationType:MJPopupViewAnimationSlideBottomBottom];
+            
+            NSNumber *nsprice = [NSNumber numberWithInt:self.price];
+            Mixpanel *mixpanel = [Mixpanel sharedInstance];
+            [mixpanel.people trackCharge:nsprice];
+            //[MBProgressHUD hideHUDForView:self.view animated:YES];
+            
+            [mixpanel.people increment:@{
+                                         @"dollars spent":nsprice,
+                                         @"pizzas ordered":@1
+                                         }];
+            
+            NSUserDefaults *orderInfo = [NSUserDefaults standardUserDefaults];
+            NSMutableArray *formattedToppingsForSubmission = [[orderInfo objectForKey:@"formattedToppingsForSubmission"] mutableCopy];
+            [formattedToppingsForSubmission removeObjectIdenticalTo:@"none"];
+            
+            NSString *pizzaToppings = [formattedToppingsForSubmission componentsJoinedByString: @","];
+            [mixpanel track:@"Pizza Toppings" properties:@{
+                                                           @"toppings":pizzaToppings
+                                                           }];
+            [self.timer invalidate];
+
+        } else if ([[responseObject objectForKey:@"status"] isEqualToString:@"failed"]) {
+            [self hideWaitingGif];
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Oops!"
+                                                            message:@"You won't be charged. Something went wrong with the order!"
+                                                           delegate:self
+                                                  cancelButtonTitle:@"Ok, thanks!"
+                                                  otherButtonTitles: nil];
+            [alert show];
+            [self.timer invalidate];
+        } else {
+            NSLog(@"%@",[responseObject objectForKey:@"status"]);
+        }
+        
+        
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Error: %@", error.description);
+    }];
+}
+
+- (void) startPollingForOrderStatus:(NSString*)order_id {
+    self.timer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(ping) userInfo:nil repeats:YES];
 }
 
 

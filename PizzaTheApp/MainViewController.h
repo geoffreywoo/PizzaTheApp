@@ -18,6 +18,9 @@
     //NSMutableString *pizzaDescription;
 }
 
+@property (nonatomic,retain) NSTimer *timer;
+@property (nonatomic) NSString *order_id;
+
 @property (nonatomic,retain) IBOutlet UIButton *confirmButton;
 @property (nonatomic,retain) IBOutlet UILabel *priceLabel;
 @property (nonatomic,retain) IBOutlet UIBarButtonItem *faqButton;
